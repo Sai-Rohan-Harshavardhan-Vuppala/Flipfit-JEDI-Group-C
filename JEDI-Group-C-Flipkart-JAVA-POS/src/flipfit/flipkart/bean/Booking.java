@@ -3,24 +3,30 @@ package flipfit.flipkart.bean;
 import java.util.Date;
 
 public class Booking {
-    private String bookingId;
+    private int bookingId;
     private int customerId;
     private int slotId;
     private Date bookingDate;
     private String bookingStatus;
+    static int bookingCounter = 0;
+    private int waitListRank;
 
-    public Booking(String bookingId, int customerId, int slotId, Date bookingDate) {
-        this.bookingId = bookingId;
+    public Booking(int customerId, int slotId, Date bookingDate) {
+        // needs to be updated, booking id will be auto generated
+        this.bookingId = bookingCounter++;
         this.customerId = customerId;
         this.slotId = slotId;
         this.bookingDate = bookingDate;
         this.bookingStatus = "Booked";
+        this.waitListRank = -1;
+        /*
+        waitListRank = -1 -> booking is pending
+        waitListRank = 0 -> booking is confirmed
+        waitListRank > 0 -> booking is waitlisted
+         */
     }
-    public String getBookingId() {
+    public int getBookingId() {
         return bookingId;
-    }
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
     }
 
     public int getCustomerId() {
@@ -51,6 +57,14 @@ public class Booking {
     }
     public void setBookingStatus(String bookingStatus) {
         this.bookingStatus = bookingStatus;
+    }
+
+    public int getWaitListRank() {
+        return waitListRank;
+    }
+
+    public void setWaitListRank(int waitListRank) {
+        this.waitListRank = waitListRank;
     }
 
 }

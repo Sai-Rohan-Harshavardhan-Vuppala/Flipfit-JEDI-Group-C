@@ -3,21 +3,25 @@ package flipfit.flipkart.bean;
 import java.sql.Time;
 
 public class Slot {
-    private String slotId;
+    private int slotId;
     private String status;
-    private Gym gym_name;
+    private int gymId;
+
+    public Slot(int gymId, Time start_time, Time end_tine, int seats_available) {
+        this.gymId = gymId;
+        this.start_time = start_time;
+        this.end_tine = end_tine;
+        this.seats_available = seats_available;
+    }
+
     private Time start_time;
     private Time end_tine;
-    private int seat_available;
+    private int seats_available;
     //waitlist we need to add then only we will add its attributes in it
 
 
-    public String getSlotId() {
+    public int getSlotId() {
         return slotId;
-    }
-
-    public void setSlotId(String slotId) {
-        this.slotId = slotId;
     }
 
     public String getStatus() {
@@ -28,12 +32,12 @@ public class Slot {
         this.status = status;
     }
 
-    public Gym getGym_name() {
-        return gym_name;
+    public int getGymId() {
+        return gymId;
     }
 
-    public void setGym_name(Gym gym_name) {
-        this.gym_name = gym_name;
+    public void setGymId(int gymId) {
+        this.gymId = gymId;
     }
 
     public Time getStart_time() {
@@ -53,10 +57,10 @@ public class Slot {
     }
 
     public int getSeat_available() {
-        return seat_available;
+        return seats_available;
     }
 
     public void setSeat_available(int seat_available) {
-        this.seat_available = seat_available;
+        this.seats_available = seat_available;
     }
 }

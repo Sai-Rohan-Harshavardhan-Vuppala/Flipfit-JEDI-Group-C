@@ -3,20 +3,17 @@ package flipfit.flipkart.bean;
 import java.util.List;
 
 public class GymOwner extends User {
-    private String  GymOwnerId;
-    private List<Gym>gymList;
 
-    public String getGymOwnerId() {
-        return GymOwnerId;
-    }
-    public void setGymOwnerId(String gymOwnerId) {
-        GymOwnerId = gymOwnerId;
+    public GymOwner(String name, String email, String username, String password) {
+        super(name, email, username, password);
+        this.gymOwnerId = gymOwnerIdCounter++;
     }
 
-    public List<Gym> getGymList() {
-        return gymList;
-    }
-    public void setGymList(List<Gym> gymList) {
-        this.gymList = gymList;
+    private int gymOwnerId;
+    static int gymOwnerIdCounter = 0;
+
+
+    public int getGymOwnerId() {
+        return gymOwnerId;
     }
 }
