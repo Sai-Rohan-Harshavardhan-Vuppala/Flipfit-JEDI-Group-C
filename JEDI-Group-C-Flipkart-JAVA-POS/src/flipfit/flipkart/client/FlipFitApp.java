@@ -61,7 +61,7 @@ public class FlipFitApp {
                 showGymOwnerMenu();
                 break;
             default:
-                System.out.println("Invalid role. Please try again.");
+                System.out.println("Invalid role. Please try again later.");
         }
     }
 
