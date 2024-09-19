@@ -1,6 +1,6 @@
 package flipfit.flipkart.bean;
 
-public class Notification {
+public class FlipFitNotification {
 
     private int notficationId;
     private String email;
@@ -25,7 +25,7 @@ public class Notification {
     private String message;
     static int counter = 0;
 
-    public Notification(String message, String email) {
+    public FlipFitNotification(String message, String email) {
         this.message = message;
         this.email = email;
         this.notficationId = counter++;

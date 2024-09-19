@@ -2,12 +2,12 @@ package flipfit.flipkart.bean;
 
 import java.sql.Time;
 
-public class Slot {
+public class FlipFitSlot {
     private int slotId;
     private String status;
     private int gymId;
 
-    public Slot(int gymId, Time start_time, Time end_tine, int seats_available) {
+    public FlipFitSlot(int gymId, Time start_time, Time end_tine, int seats_available) {
         this.gymId = gymId;
         this.start_time = start_time;
         this.end_tine = end_tine;

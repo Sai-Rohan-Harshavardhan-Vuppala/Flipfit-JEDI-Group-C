@@ -1,9 +1,9 @@
 package flipfit.flipkart.bean;
 
-public class Gym {
+public class FlipFitGym {
     private int gymId;
 
-    public Gym(int gymOwnerId, String gym_name, String gym_city) {
+    public FlipFitGym(int gymOwnerId, String gym_name, String gym_city) {
         this.gymOwnerId = gymOwnerId;
         this.gym_name = gym_name;
         this.gym_city = gym_city;

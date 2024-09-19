@@ -1,8 +1,8 @@
 package flipfit.flipkart.bean;
 
-public class GymOwner extends User {
+public class FlipFitGymOwner extends FlipFitUser {
 
-    public GymOwner(String name, String email, String username, String password) {
+    public FlipFitGymOwner(String name, String email, String username, String password) {
         super(name, email, username, password);
         this.gymOwnerId = gymOwnerIdCounter++;
     }

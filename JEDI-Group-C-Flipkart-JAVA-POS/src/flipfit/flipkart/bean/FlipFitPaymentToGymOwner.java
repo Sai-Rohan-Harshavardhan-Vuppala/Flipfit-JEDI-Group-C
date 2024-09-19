@@ -2,7 +2,7 @@ package flipfit.flipkart.bean;
 
 import java.util.Date;
 
-public class PaymentToGymOwner {
+public class FlipFitPaymentToGymOwner {
     private int paymentId;
     private int gymOwnerId;
     private double amount;
@@ -10,7 +10,7 @@ public class PaymentToGymOwner {
     private String status;
     static int paymentCounter = 0;
 
-    public PaymentToGymOwner(int gymOwnerId, double amount, Date date, String status) {
+    public FlipFitPaymentToGymOwner(int gymOwnerId, double amount, Date date, String status) {
         this.paymentId = paymentCounter++;
         this.gymOwnerId = gymOwnerId;
         this.amount = amount;

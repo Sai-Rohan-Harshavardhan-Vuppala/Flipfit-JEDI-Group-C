@@ -2,7 +2,7 @@ package flipfit.flipkart.bean;
 
 import java.util.Date;
 
-public class Booking {
+public class FlipFitBooking {
     private int bookingId;
     private int customerId;
     private int slotId;
@@ -11,7 +11,7 @@ public class Booking {
     static int bookingCounter = 0;
     private int waitListRank;
 
-    public Booking(int customerId, int slotId, Date bookingDate) {
+    public FlipFitBooking(int customerId, int slotId, Date bookingDate) {
         // needs to be updated, booking id will be auto generated
         this.bookingId = bookingCounter++;
         this.customerId = customerId;

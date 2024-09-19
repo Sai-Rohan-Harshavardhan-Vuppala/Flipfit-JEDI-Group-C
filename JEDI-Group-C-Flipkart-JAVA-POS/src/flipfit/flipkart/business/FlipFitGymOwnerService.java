@@ -1,11 +1,11 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.bean.GymOwner;
+import flipfit.flipkart.bean.FlipFitGymOwner;
 
 
     public class FlipFitGymOwnerService {
-        public GymOwner createGymOwner(){
-            GymOwner gymOwner = new GymOwner("Sankalp", "sankalpg38@gmail.com", "sankalpg38", "mypassword");
+        public FlipFitGymOwner createGymOwner(){
+            FlipFitGymOwner gymOwner = new FlipFitGymOwner("Sankalp", "sankalpg38@gmail.com", "sankalpg38", "mypassword");
             System.out.println("Gym owner" + gymOwner + "created");
             return gymOwner;
         }

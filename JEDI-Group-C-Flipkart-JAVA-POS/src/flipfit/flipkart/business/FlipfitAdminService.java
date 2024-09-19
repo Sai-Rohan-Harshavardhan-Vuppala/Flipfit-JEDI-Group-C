@@ -1,20 +1,20 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.bean.Gym;
-import flipfit.flipkart.bean.Slot;
-import flipfit.flipkart.bean.User;
+import flipfit.flipkart.bean.FlipFitGym;
+import flipfit.flipkart.bean.FlipFitSlot;
+import flipfit.flipkart.bean.FlipFitUser;
 
 public class FlipfitAdminService {
-    public void approveUser(User user) {
+    public void approveUser(FlipFitUser user) {
         System.out.println("User approved");
     }
 
-    public boolean validateGym(Gym gym) {
+    public boolean validateGym(FlipFitGym gym) {
         System.out.println("Gym approved"+gym);
         return true;
     }
 
-    public boolean validateSlot(Slot slot) {
+    public boolean validateSlot(FlipFitSlot slot) {
         System.out.println("Slot approved"+slot);
         return true;
     }

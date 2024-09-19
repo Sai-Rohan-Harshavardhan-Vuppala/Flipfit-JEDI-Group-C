@@ -2,7 +2,7 @@ package flipfit.flipkart.bean;
 
 import java.util.Date;
 
-public class PaymentToFlipfit {
+public class FlipFitPaymentToFlipfit {
     private int bookingId;
     private int paymentId;
     private String status;
@@ -10,7 +10,7 @@ public class PaymentToFlipfit {
     private Date date;
     static int counter = 0;
 
-    public PaymentToFlipfit(int bookingId, String status, double amount, Date date) {
+    public FlipFitPaymentToFlipfit(int bookingId, String status, double amount, Date date) {
         this.bookingId = bookingId;
         this.status = status;
         this.amount = amount;
