@@ -1,7 +1,5 @@
 package flipfit.flipkart.bean;
 
-import java.util.List;
-
 public class Customer extends User {
     private int customerId;
     static int customerIdCounter = 0;

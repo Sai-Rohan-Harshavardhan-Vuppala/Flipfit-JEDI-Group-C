@@ -1,7 +1,5 @@
 package flipfit.flipkart.bean;
 
-import flipfit.flipkart.business.GymOwnerService;
-
 public class Gym {
     private int gymId;
 

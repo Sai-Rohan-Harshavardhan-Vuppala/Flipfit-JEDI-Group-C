@@ -1,7 +1,5 @@
 package flipfit.flipkart.bean;
 
-import java.util.List;
-
 public class GymOwner extends User {
 
     public GymOwner(String name, String email, String username, String password) {

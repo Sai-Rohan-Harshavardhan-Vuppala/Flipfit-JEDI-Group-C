@@ -1,8 +1,6 @@
 package flipfit.flipkart.business;
 
-import java.util.Date;
-
-public class PaymentService {
+public class FlipFitPaymentService {
     public void distributePayment(int bookingId){
         // update the paymentToGymOwnerDatabase with the owner mentioned price payment record
 

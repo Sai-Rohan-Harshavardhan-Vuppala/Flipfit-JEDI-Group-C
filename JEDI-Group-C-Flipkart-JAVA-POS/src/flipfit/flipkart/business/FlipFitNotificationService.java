@@ -2,7 +2,7 @@ package flipfit.flipkart.business;
 
 import flipfit.flipkart.bean.Notification;
 
-public class NotificationService {
+public class FlipFitNotificationService {
     public Notification createNotification(String message, String email){
         // creating dummy notification --> needs to be changed
         Notification notification = new Notification(message, email);

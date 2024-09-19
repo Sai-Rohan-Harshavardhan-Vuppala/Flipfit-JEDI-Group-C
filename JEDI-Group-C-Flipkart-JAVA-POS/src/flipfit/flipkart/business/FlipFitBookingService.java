@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BookingService {
+public class FlipFitBookingService {
     public List<Booking> getBookingsByCustomerId(int customerId){
-        List<Booking> bookings = new ArrayList<>();
+        List<flipfit.flipkart.bean.Booking> bookings = new ArrayList<>();
         System.out.println("List of all bookings displayed");
         return bookings;
     }
 
-    public Booking createBooking(int customerId, int slotId, Date bookingDate, int paymentId){
+    public flipfit.flipkart.bean.Booking createBooking(int customerId, int slotId, Date bookingDate, int paymentId){
         // Logic for creating a booking
-        Booking booking = new Booking(customerId, slotId, bookingDate);
+        flipfit.flipkart.bean.Booking booking = new flipfit.flipkart.bean.Booking(customerId, slotId, bookingDate);
         System.out.println("Created booking");
         return booking;
     }
@@ -37,10 +37,9 @@ public class BookingService {
 
     }
 
-    public List<Booking> getWaitListedBookings(){
+    public List<flipfit.flipkart.bean.Booking> getWaitListedBookings(){
         // retrieve waitlisted bookings from booking database
-        List<Booking> bookings = new ArrayList<>();
+        List<flipfit.flipkart.bean.Booking> bookings = new ArrayList<>();
         return bookings;
     }
-
 }
