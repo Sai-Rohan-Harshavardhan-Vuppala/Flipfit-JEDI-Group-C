@@ -97,7 +97,7 @@ public class FlipFitApp {
     private static void showCustomerMenu(FlipFitCustomer flipFitCustomer) {
         System.out.println("\nCustomer Menu");
         CustomerClient customerClient = new CustomerClient(flipFitCustomer);
-        while(!customerClient.showMenu());
+        while(customerClient.showMenu() == false);
     }
 
     private static void registerCustomer() {

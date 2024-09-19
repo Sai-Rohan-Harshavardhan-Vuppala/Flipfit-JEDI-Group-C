@@ -3,7 +3,7 @@ package flipfit.flipkart.business;
 import flipfit.flipkart.bean.FlipFitGymOwner;
 import flipfit.flipkart.bean.FlipFitSlot;
 
-import java.sql.Time;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,14 +40,14 @@ public class FlipFitGymOwnerService {
      * Slot services begin from here ----------------------->
      */
 
-    public FlipFitSlot createSlot(int gymId, Time startTime, Time endTime, int seatsAvailable) {
-        FlipFitSlot slot = new FlipFitSlot(gymId, startTime, endTime, seatsAvailable);
+    public FlipFitSlot createSlot(int gymId, LocalTime startTime, LocalTime endTime, int seatsAvailable, double price) {
+        FlipFitSlot slot = new FlipFitSlot(gymId, startTime, endTime, seatsAvailable, price);
         System.out.println("Created slot " + slot);
         return slot;
     }
 
 
-    public void updateSlot(int gymId, Time startTime, Time endTime, int seatsAvailable) {
+    public void updateSlot(int gymId, LocalTime startTime, LocalTime endTime, int seatsAvailable) {
         System.out.println("Updated slot");
     }
 
@@ -56,11 +56,16 @@ public class FlipFitGymOwnerService {
         return true;
     }
 
+    public FlipFitSlot getSlot(int slotId){
+        // get the slot with slotId from the database
+        return createSlot(1, LocalTime.now(), LocalTime.now().plus(Duration.ofMinutes(55)), 50, 200);
+    }
+
     public boolean checkSlotAvailability(int slotId){
         System.out.println("Checked availability of " + slotId);
         return true;
     }
-    public List<FlipFitSlot> searchByTime(String city, Time time){
+    public List<FlipFitSlot> searchByTime(String city, LocalTime time){
         List<FlipFitSlot> slots = new ArrayList<>();
         return slots;
     }

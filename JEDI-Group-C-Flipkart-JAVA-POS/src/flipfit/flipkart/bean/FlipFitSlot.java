@@ -1,24 +1,28 @@
 package flipfit.flipkart.bean;
 
-import java.sql.Time;
+import java.time.LocalTime;
 
 public class FlipFitSlot {
     private int slotId;
     private String status;
     private int gymId;
-
-    public FlipFitSlot(int gymId, Time start_time, Time end_tine, int seats_available) {
-        this.gymId = gymId;
-        this.start_time = start_time;
-        this.end_tine = end_tine;
-        this.seats_available = seats_available;
-    }
-
-    private Time start_time;
-    private Time end_tine;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int seats_available;
+    private double price;
+
+    public FlipFitSlot(int gymId, LocalTime startTime, LocalTime endTime, int seats_available, double price) {
+        this.gymId = gymId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.seats_available = seats_available;
+        this.price = price;
+    }
     //waitlist we need to add then only we will add its attributes in it
 
+    public double getPrice() {
+        return price;
+    }
 
     public int getSlotId() {
         return slotId;
@@ -40,27 +44,27 @@ public class FlipFitSlot {
         this.gymId = gymId;
     }
 
-    public Time getStart_time() {
-        return start_time;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setStart_tine(Time start_time) {
-        this.start_time = start_time;
+    public void setStart_tine(LocalTime startTime) {
+        this.startTime = startTime;
     }
 
-    public Time getEnd_tine() {
-        return end_tine;
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_tine(Time end_tine) {
-        this.end_tine = end_tine;
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public int getSeat_available() {
         return seats_available;
     }
 
-    public void setSeat_available(int seat_available) {
-        this.seats_available = seat_available;
+    public void setSeat_available(int seats_available) {
+        this.seats_available = seats_available;
     }
 }

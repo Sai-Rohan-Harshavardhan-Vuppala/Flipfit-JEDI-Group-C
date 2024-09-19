@@ -1,13 +1,16 @@
 package flipfit.flipkart.bean;
 
 public class FlipFitPayment {
-    private int transactionId;
-    private int customerId;
+    private String transactionId;
     private int paymentId;
+    static int paymentCounter = 0;
 
-    public FlipFitPayment(int transactionId, int customerId, int paymentId) {
+    public FlipFitPayment(String transactionId) {
         this.transactionId = transactionId;
-        this.customerId = customerId;
-        this.paymentId = paymentId;
+        this.paymentId = paymentCounter++;
+    }
+
+    public int getPaymentId(){
+        return paymentId;
     }
 }
