@@ -1,13 +1,16 @@
 package flipfit.flipkart.client;
+import flipfit.flipkart.bean.FlipFitCustomer;
+import flipfit.flipkart.business.FlipFitAdminService;
+import flipfit.flipkart.business.FlipFitCustomerService;
+import flipfit.flipkart.business.FlipFitGymOwnerService;
+
 import java.util.Scanner;
 
 public class FlipFitApp {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        while (true) {
-            showMainMenu();
-        }
+        showMainMenu();
     }
 
     public static void showMainMenu() {
@@ -49,16 +52,28 @@ public class FlipFitApp {
         String password = scanner.nextLine();
         System.out.print("Role (Admin/Customer/GymOwner): ");
         String role = scanner.nextLine();
-
         switch (role.toLowerCase()) {
-            case "admin":
-                showAdminMenu();
-                break;
             case "customer":
-                showCustomerMenu();
+                FlipFitCustomerService flipFitCustomerService = new FlipFitCustomerService();
+                FlipFitCustomer flipFitCustomer = flipFitCustomerService.login(username, password);
+                if(flipFitCustomer != null){
+                    System.out.println("Logged in successfully.");
+                    showCustomerMenu(flipFitCustomer);
+                }
+                break;
+            case "admin":
+                FlipFitAdminService flipFitAdminService = new FlipFitAdminService();
+                if(flipFitAdminService.login(username, password)){
+                    System.out.println("Logged in successfully.");
+                    showAdminMenu();
+                }
                 break;
             case "gymowner":
-                showGymOwnerMenu();
+                FlipFitGymOwnerService flipFitGymOwnerService = new FlipFitGymOwnerService();
+                if(flipFitGymOwnerService.login(username, password)){
+                    System.out.println("Logged in successfully.");
+                    showGymOwnerMenu();
+                }
                 break;
             default:
                 System.out.println("Invalid role. Please try again later.");
@@ -67,17 +82,22 @@ public class FlipFitApp {
 
     private static void showAdminMenu() {
         System.out.println("\nAdmin Menu");
+        FlipFitAdminClient flipFitAdminClient = new FlipFitAdminClient();
+        while(!flipFitAdminClient.showMenu());
 
     }
 
     private static void showGymOwnerMenu() {
         System.out.println("\nGym Owner Menu");
+        GymOwnerClient gymOwnerClient = new GymOwnerClient();
+        while(!gymOwnerClient.showMenu());
 
     }
 
-    private static void showCustomerMenu() {
+    private static void showCustomerMenu(FlipFitCustomer flipFitCustomer) {
         System.out.println("\nCustomer Menu");
-
+        CustomerClient customerClient = new CustomerClient(flipFitCustomer);
+        while(!customerClient.showMenu());
     }
 
     private static void registerCustomer() {

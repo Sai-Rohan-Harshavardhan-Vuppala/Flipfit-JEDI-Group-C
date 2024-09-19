@@ -5,12 +5,14 @@ public class FlipFitUser {
     private String password;
     private String email;
     private String name;
+    private Role role;
 
-    public FlipFitUser(String name, String email, String username, String password) {
+    public FlipFitUser(String name, String email, String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.role = role;
     }
 
 
@@ -50,5 +52,10 @@ public class FlipFitUser {
     public void setName(String name) {
         this.email = email;
     }
+
+    public Role getRole() {
+        return role;
+    }
+
 
 }
