@@ -10,14 +10,15 @@ public class FlipFitBooking {
     private String bookingStatus;
     static int bookingCounter = 0;
     private int waitListRank;
+    private int paymentId;
 
-    public FlipFitBooking(int customerId, int slotId, Date bookingDate) {
+    public FlipFitBooking(int customerId, int slotId, int paymentId) {
         // needs to be updated, booking id will be auto generated
         this.bookingId = bookingCounter++;
         this.customerId = customerId;
         this.slotId = slotId;
-        this.bookingDate = bookingDate;
         this.bookingStatus = "Booked";
+        this.paymentId = paymentId;
         this.waitListRank = -1;
         /*
         waitListRank = -1 -> booking is pending
@@ -25,6 +26,10 @@ public class FlipFitBooking {
         waitListRank > 0 -> booking is waitlisted
          */
     }
+    public int getPaymentId(){
+        return paymentId;
+    }
+
     public int getBookingId() {
         return bookingId;
     }
