@@ -101,12 +101,32 @@ public class FlipFitApp {
     }
 
     private static void registerCustomer() {
-        System.out.println("\nRegistration as Flipfit Customer");
+        System.out.println("Enter Customer name: ");
+        String customerName = scanner.nextLine();
+        System.out.println("Enter Customer email: ");
+        String customerEmail = scanner.nextLine();
+        System.out.println("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter Customer password: ");
+        String password = scanner.nextLine();
+        FlipFitCustomerService flipFitCustomerService = new FlipFitCustomerService();
+        flipFitCustomerService.createCustomer(username, password, customerName, customerEmail);
 
     }
 
     private static void registerGymOwner() {
-        System.out.println("\nRegistration as Flipfit Gym Owner");
+        System.out.println("Enter Gym owner name: ");
+        String gymOwnerName = scanner.nextLine();
+        System.out.println("Enter Gym owner email: ");
+        String gymOwnerEmail = scanner.nextLine();
+        System.out.println("Enter Gym owner username");
+        String gymOwnerUsername = scanner.nextLine();
+        System.out.println("Enter Gym owner password: ");
+        String gymOwnerPassword = scanner.nextLine();
+        System.out.println("Enter Gym owner account number: ");
+        String gymOwnerAccountNumber = scanner.nextLine();
+        FlipFitGymOwnerService flipFitGymOwnerService = new FlipFitGymOwnerService();
+        flipFitGymOwnerService.createGymOwner(gymOwnerName, gymOwnerEmail, gymOwnerUsername, gymOwnerPassword, gymOwnerAccountNumber);
 
     }
 

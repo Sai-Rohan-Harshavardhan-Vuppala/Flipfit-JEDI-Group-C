@@ -17,6 +17,7 @@ public class FlipFitCustomerService {
     public FlipFitCustomer createCustomer(String customerName, String username, String customerEmail, String customerPassword){
         FlipFitCustomer customer = new FlipFitCustomer(customerName, username, customerEmail, customerPassword);
         System.out.println("Customer " + customer + " created");
+        System.out.println("\nRegistration successful.");
         return customer;
     }
 

@@ -23,11 +23,10 @@ public class FlipFitAdminClient {
 
     }
     public boolean showMenu(){
-        System.out.println("Welcome to FlipFit Admin Client");
-        System.out.println("1. Approve user");
-        System.out.println("2. Validate Gym");
-        System.out.println("3. Validate Slot");
-        System.out.println("4. Logout");
+        System.out.println("\n------------------------------\nWelcome to FlipFit Admin Client");
+        System.out.println("1. Validate Gym");
+        System.out.println("2. Validate Slot");
+        System.out.println("3. Logout");
 
         Scanner sc = new Scanner(in);
 
@@ -35,17 +34,17 @@ public class FlipFitAdminClient {
         int choice = Integer.parseInt(sc.nextLine());
 
         switch(choice){
-                    case 1:{
-                        validateGym();
-                        break;
-                    }
-                    case 2:{
-                        validateSlot();
-                        break;
-                    }
-                    default: {
-                        System.out.println("Invalid choice");
-                    }
+            case 1:
+                validateGym();
+                break;
+
+            case 2:
+                validateSlot();
+                break;
+
+            case 3:
+                System.out.println("Logged out successfully");
+                return true;
         }
         return false;
     }

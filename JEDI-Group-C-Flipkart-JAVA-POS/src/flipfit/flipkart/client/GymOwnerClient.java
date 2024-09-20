@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class GymOwnerClient {
     public boolean showMenu(){
-        System.out.println("Welcome to FlipFit Gym Owner Client");
+        System.out.println("\n------------------------------\nWelcome to FlipFit Gym Owner Client");
         System.out.println("1. Add Gym");
         System.out.println("2. Update Gym");
         System.out.println("3. Delete Gym");

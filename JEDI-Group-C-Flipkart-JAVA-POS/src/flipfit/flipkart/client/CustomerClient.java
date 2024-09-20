@@ -17,7 +17,7 @@ public class CustomerClient {
 
 
     public boolean showMenu(){
-        System.out.println("Welcome to FlipFit Customer Client");
+        System.out.println("\n------------------------------\nWelcome to FlipFit Customer Client");
         System.out.println("1. Book slot");
         System.out.println("2. View all booked slots");
         System.out.println("3. Cancel booked slot");
@@ -42,7 +42,7 @@ public class CustomerClient {
 
             case 3:
                 System.out.println("Enter slotId: ");
-                slotId = Integer.parseInt(scanner.nextLine());
+                int inputSlotId = Integer.parseInt(scanner.nextLine());
                 System.out.println("Slot cancelled successfully");
                 break;
 

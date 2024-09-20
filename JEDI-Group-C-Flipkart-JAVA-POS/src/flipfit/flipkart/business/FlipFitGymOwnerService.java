@@ -10,9 +10,10 @@ import java.util.List;
 
 
 public class FlipFitGymOwnerService {
-    public FlipFitGymOwner createGymOwner(){
-        FlipFitGymOwner gymOwner = new FlipFitGymOwner("Sankalp", "sankalpg38@gmail.com", "sankalpg38", "mypassword");
+    public FlipFitGymOwner createGymOwner(String name, String email, String username, String password, String accountNumber){
+        FlipFitGymOwner gymOwner = new FlipFitGymOwner(name, email, username, password, accountNumber);
         System.out.println("Gym owner" + gymOwner + "created");
+        System.out.println("\nRegistration successful");
         return gymOwner;
     }
 
