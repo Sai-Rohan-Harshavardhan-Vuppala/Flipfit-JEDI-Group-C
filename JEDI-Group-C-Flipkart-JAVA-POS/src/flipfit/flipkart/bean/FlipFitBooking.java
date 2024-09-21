@@ -8,13 +8,10 @@ public class FlipFitBooking {
     private int slotId;
     private Date bookingDate;
     private String bookingStatus;
-    static int bookingCounter = 0;
     private int waitListRank;
     private int paymentId;
 
     public FlipFitBooking(int customerId, int slotId, int paymentId) {
-        // needs to be updated, booking id will be auto generated
-        this.bookingId = bookingCounter++;
         this.customerId = customerId;
         this.slotId = slotId;
         this.bookingStatus = "Booked";

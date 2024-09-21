@@ -1,23 +1,39 @@
 package flipfit.flipkart.client;
-import flipfit.flipkart.bean.FlipFitCustomer;
+import flipfit.flipkart.bean.*;
 import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
+import flipfit.flipkart.business.FlipFitPaymentService;
 
 import java.util.Scanner;
 
 public class FlipFitApp {
+
     private static Scanner scanner = new Scanner(System.in);
+    private static FlipFitGymOwnerService flipFitGymOwnerService;
+    private static FlipFitCustomerService flipFitCustomerService;
+    private static FlipFitAdminService flipFitAdminService;
+    private static FlipFitPaymentService flipFitPaymentService;
 
     public static void main(String[] args) {
-        showMainMenu();
+
+        flipFitGymOwnerService = new FlipFitGymOwnerService();
+        flipFitCustomerService = new FlipFitCustomerService();
+        flipFitAdminService = new FlipFitAdminService();
+        flipFitPaymentService = new FlipFitPaymentService();
+        while(showMainMenu() == false);
     }
 
-    public static void showMainMenu() {
+    public static boolean showMainMenu() {
+        /*
+            creating serviceInstances
+         */
+
+
         System.out.println("\nWelcome to the Flipfit App");
         System.out.println("1. Login");
-        System.out.println("2. Registration as Flipfit Customer");
-        System.out.println("3. Registration as Flipfit Gym Owner");
+        System.out.println("2. Register as Flipfit Customer");
+        System.out.println("3. Register as Flipfit Gym Owner");
         System.out.println("4. Update Password");
         System.out.println("5. Exit");
 
@@ -37,42 +53,41 @@ public class FlipFitApp {
                 break;
             case 5:
                 System.out.println("Exiting...");
-                System.exit(0);
-                break;
+                return true;
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
+        return false;
     }
 
     private static void login() {
         System.out.println("\nLogin");
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Enter Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Enter Password: ");
         String password = scanner.nextLine();
         System.out.print("Role (Admin/Customer/GymOwner): ");
         String role = scanner.nextLine();
         switch (role.toLowerCase()) {
             case "customer":
-                FlipFitCustomerService flipFitCustomerService = new FlipFitCustomerService();
-                FlipFitCustomer flipFitCustomer = flipFitCustomerService.login(username, password);
+                FlipFitCustomer flipFitCustomer = flipFitCustomerService.login(email, password);
                 if(flipFitCustomer != null){
                     System.out.println("Logged in successfully.");
                     showCustomerMenu(flipFitCustomer);
                 }
                 break;
             case "admin":
-                FlipFitAdminService flipFitAdminService = new FlipFitAdminService();
-                if(flipFitAdminService.login(username, password)){
+                FlipFitAdmin flipFitAdmin = flipFitAdminService.login(email, password);
+                if(flipFitAdmin != null){
                     System.out.println("Logged in successfully.");
-                    showAdminMenu();
+                    showAdminMenu(flipFitAdmin);
                 }
                 break;
             case "gymowner":
-                FlipFitGymOwnerService flipFitGymOwnerService = new FlipFitGymOwnerService();
-                if(flipFitGymOwnerService.login(username, password)){
+                FlipFitGymOwner flipFitGymOwner = flipFitGymOwnerService.login(email, password);
+                if(flipFitGymOwner != null){
                     System.out.println("Logged in successfully.");
-                    showGymOwnerMenu();
+                    showGymOwnerMenu(flipFitGymOwner);
                 }
                 break;
             default:
@@ -80,53 +95,53 @@ public class FlipFitApp {
         }
     }
 
-    private static void showAdminMenu() {
+    private static void showAdminMenu(FlipFitAdmin flipFitAdmin) {
         System.out.println("\nAdmin Menu");
-        FlipFitAdminClient flipFitAdminClient = new FlipFitAdminClient();
+        FlipFitAdminClient flipFitAdminClient = new FlipFitAdminClient(flipFitGymOwnerService, flipFitCustomerService, flipFitAdminService, flipFitPaymentService, flipFitAdmin);
         while(!flipFitAdminClient.showMenu());
 
     }
 
-    private static void showGymOwnerMenu() {
+    private static void showGymOwnerMenu(FlipFitGymOwner flipFitGymOwner) {
         System.out.println("\nGym Owner Menu");
-        GymOwnerClient gymOwnerClient = new GymOwnerClient();
+        GymOwnerClient gymOwnerClient = new GymOwnerClient(flipFitGymOwnerService, flipFitCustomerService, flipFitAdminService, flipFitPaymentService, flipFitGymOwner);
         while(!gymOwnerClient.showMenu());
 
     }
 
     private static void showCustomerMenu(FlipFitCustomer flipFitCustomer) {
         System.out.println("\nCustomer Menu");
-        CustomerClient customerClient = new CustomerClient(flipFitCustomer);
+        CustomerClient customerClient = new CustomerClient(flipFitGymOwnerService, flipFitCustomerService, flipFitAdminService, flipFitPaymentService, flipFitCustomer);
         while(customerClient.showMenu() == false);
     }
 
     private static void registerCustomer() {
-        System.out.println("Enter Customer name: ");
-        String customerName = scanner.nextLine();
-        System.out.println("Enter Customer email: ");
-        String customerEmail = scanner.nextLine();
         System.out.println("Enter username: ");
         String username = scanner.nextLine();
-        System.out.println("Enter Customer password: ");
+        System.out.println("Enter password: ");
         String password = scanner.nextLine();
-        FlipFitCustomerService flipFitCustomerService = new FlipFitCustomerService();
-        flipFitCustomerService.createCustomer(username, password, customerName, customerEmail);
+        System.out.println("Enter email: ");
+        String email = scanner.nextLine();
+        System.out.println("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter phone number: ");
+        String phone = scanner.nextLine();
+        flipFitCustomerService.createCustomer(username, password, email, name, phone);
 
     }
 
     private static void registerGymOwner() {
-        System.out.println("Enter Gym owner name: ");
-        String gymOwnerName = scanner.nextLine();
-        System.out.println("Enter Gym owner email: ");
-        String gymOwnerEmail = scanner.nextLine();
-        System.out.println("Enter Gym owner username");
-        String gymOwnerUsername = scanner.nextLine();
-        System.out.println("Enter Gym owner password: ");
-        String gymOwnerPassword = scanner.nextLine();
+        System.out.println("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter password: ");
+        String password = scanner.nextLine();
+        System.out.println("Enter email: ");
+        String email = scanner.nextLine();
+        System.out.println("Enter name: ");
+        String name = scanner.nextLine();
         System.out.println("Enter Gym owner account number: ");
-        String gymOwnerAccountNumber = scanner.nextLine();
-        FlipFitGymOwnerService flipFitGymOwnerService = new FlipFitGymOwnerService();
-        flipFitGymOwnerService.createGymOwner(gymOwnerName, gymOwnerEmail, gymOwnerUsername, gymOwnerPassword, gymOwnerAccountNumber);
+        String accountNumber = scanner.nextLine();
+        flipFitGymOwnerService.createGymOwner(username, password, email, name, accountNumber);
 
     }
 
