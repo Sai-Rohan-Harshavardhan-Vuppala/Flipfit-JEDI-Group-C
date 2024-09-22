@@ -31,10 +31,12 @@ public class FlipFitCustomerService {
         return bookings;
     }
 
-    public FlipFitBooking createBooking(int customerId, int slotId, Date bookingDate, int paymentId){
+    public FlipFitBooking createBooking(int customerId, int slotId, String transactionId){
         // Logic for creating a booking
-        flipfit.flipkart.bean.FlipFitBooking booking = new flipfit.flipkart.bean.FlipFitBooking(customerId, slotId, bookingDate);
-        System.out.println("Created booking");
+        FlipFitPaymentService paymentService = new FlipFitPaymentService();
+        int paymentId = paymentService.createPayment(transactionId);
+        FlipFitBooking booking = new FlipFitBooking(customerId, slotId, paymentId);
+        System.out.println("Created booking successfully");
         return booking;
     }
 
