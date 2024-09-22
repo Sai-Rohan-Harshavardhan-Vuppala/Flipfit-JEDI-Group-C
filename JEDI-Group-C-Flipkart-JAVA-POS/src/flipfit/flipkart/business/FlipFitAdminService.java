@@ -1,24 +1,51 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.bean.FlipFitGym;
-import flipfit.flipkart.bean.FlipFitNotification;
-import flipfit.flipkart.bean.FlipFitSlot;
-import flipfit.flipkart.bean.FlipFitUser;
+import flipfit.flipkart.DAO.FlipFitAdminDAO;
+import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
+import flipfit.flipkart.DAO.FlipFitUserDAO;
+import flipfit.flipkart.bean.*;
+import flipfit.flipkart.helper.Helper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlipFitAdminService {
-    public boolean login(String username, String password) {
-        return true;
-    }
-    public void approveUser(FlipFitUser user) {
-        System.out.println("User approved");
+    private FlipFitAdminDAO flipFitAdminDAO;
+    public FlipFitAdminService() {
+        flipFitAdminDAO = new FlipFitAdminDAO();
     }
 
-    public boolean validateGym(FlipFitGym gym) {
+    public FlipFitAdmin login(String email, String password) {
+        FlipFitUser user = Helper.verifyCredentials(email, password);
+        return user != null ? flipFitAdminDAO.getByUser(user) : null;
+    }
+
+    public void approveGymOwner(int userId) {
+        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
+        FlipFitUser flipFitUser = flipFitUserDAO.getByUserId(userId);
+//        flipFitUser.printAllDetails();
+        if(flipFitUser == null) {
+            System.out.println("User " + userId + " doesn't exist");
+            return;
+        }
+        flipFitUserDAO.update(flipFitUser.getUsername(), flipFitUser.getPassword(), flipFitUser.getEmail(), flipFitUser.getName(), "whitelisted", flipFitUser.getRoleId(), flipFitUser.getUserId());
+        System.out.println("Gym Owner request with User ID " + userId + " was approved");
+    }
+
+    public void rejectGymOwner(int userId){
+        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
+        flipFitUserDAO.delete(userId);
+        FlipFitGymOwnerDAO flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
+        flipFitGymOwnerDAO.deleteByUserId(userId);
+        System.out.println("Gym Owner request with User ID " + userId + " was rejected");
+    }
+
+    public boolean approveGym(FlipFitGym gym) {
         System.out.println("Gym approved"+gym);
         return true;
     }
 
-    public boolean validateSlot(FlipFitSlot slot) {
+    public boolean approveSlot(FlipFitSlot slot) {
         System.out.println("Slot approved"+slot);
         return true;
     }
@@ -55,6 +82,7 @@ public class FlipFitAdminService {
 
         // iterate through the bookings and change their rank by -1 and call createNotification
     }
+
 
     /*
      * Notification services end here -------------------------->

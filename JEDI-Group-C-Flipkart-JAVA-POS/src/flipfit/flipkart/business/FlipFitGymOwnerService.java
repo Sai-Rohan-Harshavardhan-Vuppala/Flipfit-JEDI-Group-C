@@ -1,7 +1,11 @@
 package flipfit.flipkart.business;
 
+import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
+import flipfit.flipkart.DAO.FlipFitUserDAO;
 import flipfit.flipkart.bean.FlipFitGymOwner;
 import flipfit.flipkart.bean.FlipFitSlot;
+import flipfit.flipkart.bean.FlipFitUser;
+import flipfit.flipkart.helper.Helper;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -10,14 +14,39 @@ import java.util.List;
 
 
 public class FlipFitGymOwnerService {
-    public FlipFitGymOwner createGymOwner(){
-        FlipFitGymOwner gymOwner = new FlipFitGymOwner("Sankalp", "sankalpg38@gmail.com", "sankalpg38", "mypassword");
-        System.out.println("Gym owner" + gymOwner + "created");
-        return gymOwner;
+    private FlipFitGymOwnerDAO flipFitGymOwnerDAO;
+
+    public FlipFitGymOwnerService() {
+        flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
     }
 
-    public boolean login(String username, String password){
-        return true;
+    public FlipFitGymOwner login(String email, String password){
+        FlipFitUser user = Helper.verifyCredentials(email, password);
+        return user != null ? flipFitGymOwnerDAO.getByUser(user) : null;
+    }
+
+    public List<FlipFitGymOwner> getPendingGymOwners() {
+        return flipFitGymOwnerDAO.getPendingGymOwners();
+    }
+
+    public FlipFitGymOwner createGymOwner(String username, String password, String email, String name, String accountNumber){
+        if(Helper.checkIfUserWithEmailExists(email)){
+            System.out.println("User with email already exists");
+            return null;
+        }
+        System.out.println("Creating gym owner");
+        /*
+        validate other details
+         */
+
+        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
+        flipFitUserDAO.create(username, password, email, name, 3, "pending");
+        FlipFitUser flipFitUser = flipFitUserDAO.getByEmail(email);
+        int userId = flipFitUser.getUserId();
+        flipFitGymOwnerDAO.create(userId, accountNumber);
+        FlipFitGymOwner flipFitGymOwner = flipFitGymOwnerDAO.getByUser(flipFitUser);
+        System.out.println("Your registration request is pending at admin");
+        return flipFitGymOwner;
     }
 
     public void createGym(){
@@ -35,7 +64,6 @@ public class FlipFitGymOwnerService {
     public void getGymByGymId(){
 
     }
-
     /*
      * Slot services begin from here ----------------------->
      */

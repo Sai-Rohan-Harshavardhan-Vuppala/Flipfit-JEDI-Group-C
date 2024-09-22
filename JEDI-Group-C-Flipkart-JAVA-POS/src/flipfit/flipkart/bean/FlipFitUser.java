@@ -1,26 +1,35 @@
 package flipfit.flipkart.bean;
 
 public class FlipFitUser {
+    private int userId;
     private String username;
     private String password;
     private String email;
     private String name;
-    private Role role;
+    private int roleId;
+    private String status;
 
-    public FlipFitUser(String name, String email, String username, String password, Role role) {
+    public FlipFitUser() {}
+
+    public FlipFitUser(int userId, String name, String email, String username, String password, int roleId, String status) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
-        this.role = role;
+        this.roleId = roleId;
+        this.status = status;
+        this.userId = userId;
     }
 
-
-//    public User(String username, String password, String name) {
-//        this.username = username;
-//        this.password = password;
-//        this.email = name;
-//    }
+    public FlipFitUser(FlipFitUser user) {
+        this.userId = user.getUserId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.roleId = user.getRoleId();
+        this.status = user.getStatus();
+    }
 
     public String getName() {
         return name;
@@ -37,7 +46,6 @@ public class FlipFitUser {
         this.username = username;
     }
 
-
     public String getPassword() {
         return password;
     }
@@ -50,12 +58,41 @@ public class FlipFitUser {
         return email;
     }
     public void setName(String name) {
-        this.email = email;
+        this.name = name;
     }
 
-    public Role getRole() {
-        return role;
+    public int getRoleId() {
+        return roleId;
     }
 
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void printAllDetails() {
+        System.out.println("username: " + getUsername());
+        System.out.println("password: " + getPassword());
+        System.out.println("email: " + getEmail());
+        System.out.println("roleId: " + getRoleId());
+        System.out.println("status: " + getStatus());
+        System.out.println("userId: " + getUserId());
+        System.out.println("name: " + getName());
+    }
 }

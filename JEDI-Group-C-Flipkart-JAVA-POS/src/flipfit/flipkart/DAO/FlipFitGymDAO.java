@@ -1,4 +1,4 @@
 package flipfit.flipkart.DAO;
 
-public class CustomerDAO {
+public class FlipFitGymDAO {
 }

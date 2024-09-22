@@ -1,10 +1,31 @@
 package flipfit.flipkart.client;
 
+import flipfit.flipkart.bean.FlipFitGymOwner;
+import flipfit.flipkart.business.FlipFitAdminService;
+import flipfit.flipkart.business.FlipFitCustomerService;
+import flipfit.flipkart.business.FlipFitGymOwnerService;
+import flipfit.flipkart.business.FlipFitPaymentService;
+
 import java.util.Scanner;
 
 public class GymOwnerClient {
+    private FlipFitAdminService flipFitAdminService;
+    private FlipFitGymOwnerService flipFitGymOwnerService;
+    private FlipFitCustomerService flipFitCustomerService;
+    private FlipFitPaymentService flipFitPaymentService;
+    private FlipFitGymOwner flipFitGymOwner;
+
+    public GymOwnerClient(FlipFitGymOwnerService flipFitGymOwnerService, FlipFitCustomerService flipFitCustomerService, FlipFitAdminService flipFitAdminService, FlipFitPaymentService flipFitPaymentService, FlipFitGymOwner flipFitGymOwner) {
+        this.flipFitGymOwnerService = flipFitGymOwnerService;
+        this.flipFitCustomerService = flipFitCustomerService;
+        this.flipFitAdminService = flipFitAdminService;
+        this.flipFitPaymentService = flipFitPaymentService;
+        this.flipFitGymOwner = flipFitGymOwner;
+    }
+
+
     public boolean showMenu(){
-        System.out.println("Welcome to FlipFit Gym Owner Client");
+        System.out.println("\n------------------------------\nWelcome to FlipFit Gym Owner Client");
         System.out.println("1. Add Gym");
         System.out.println("2. Update Gym");
         System.out.println("3. Delete Gym");
