@@ -43,9 +43,11 @@ public class GymOwnerClient {
                 String gymName = scanner.nextLine();
 
                 System.out.println("Enter City: ");
-                String city = scanner.nextLine();
+                String gymCity = scanner.nextLine();
 
-                System.out.println("Gym Created Successfully");
+                System.out.println("Enter Area (Locality) in the city: ");
+                String gymArea = scanner.nextLine();
+                flipFitGymOwnerService.createGym(gymName, gymCity, gymArea, flipFitGymOwner.getGymOwnerId());
                 break;
             case 2:
                 System.out.println("Enter Gym Id: ");

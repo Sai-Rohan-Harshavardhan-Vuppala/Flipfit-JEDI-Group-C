@@ -1,7 +1,9 @@
 package flipfit.flipkart.business;
 
+import flipfit.flipkart.DAO.FlipFitGymDAO;
 import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
 import flipfit.flipkart.DAO.FlipFitUserDAO;
+import flipfit.flipkart.bean.FlipFitGym;
 import flipfit.flipkart.bean.FlipFitGymOwner;
 import flipfit.flipkart.bean.FlipFitSlot;
 import flipfit.flipkart.bean.FlipFitUser;
@@ -15,9 +17,11 @@ import java.util.List;
 
 public class FlipFitGymOwnerService {
     private FlipFitGymOwnerDAO flipFitGymOwnerDAO;
+    private FlipFitGymDAO flipFitGymDAO;
 
     public FlipFitGymOwnerService() {
         flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
+        flipFitGymDAO = new FlipFitGymDAO();
     }
 
     public FlipFitGymOwner login(String email, String password){
@@ -49,8 +53,8 @@ public class FlipFitGymOwnerService {
         return flipFitGymOwner;
     }
 
-    public void createGym(){
-
+    public void createGym(String gymName, String gymCity, String gymArea, int gymOwnerId){
+        flipFitGymDAO.create(gymName, gymCity, gymArea, gymOwnerId);
     }
 
     public void updateGym(){
@@ -100,6 +104,10 @@ public class FlipFitGymOwnerService {
     public List<FlipFitSlot> searchByDate(String city, Date date){
         List<FlipFitSlot> slots = new ArrayList<>();
         return slots;
+    }
+
+    public List<FlipFitGym> getPendingGyms() {
+        return flipFitGymDAO.getPendingGyms();
     }
 
     /*
