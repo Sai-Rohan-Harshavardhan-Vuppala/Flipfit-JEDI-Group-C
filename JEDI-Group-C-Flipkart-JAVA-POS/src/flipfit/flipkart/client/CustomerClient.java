@@ -1,12 +1,15 @@
 package flipfit.flipkart.client;
 
+import flipfit.flipkart.bean.FlipFitBooking;
 import flipfit.flipkart.bean.FlipFitCustomer;
+import flipfit.flipkart.bean.FlipFitGym;
 import flipfit.flipkart.bean.FlipFitSlot;
 import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CustomerClient {
@@ -25,6 +28,29 @@ public class CustomerClient {
         this.flipFitCustomer = flipFitCustomer;
     }
 
+    private void showAllGyms(List<FlipFitGym> allGyms) {
+        System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("All Gyms in selected City%n");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", "GYM ID", "GYM OWNER ID", "GYM NAME", "GYM CITY", "GYM AREA");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        for(FlipFitGym gym: allGyms){
+            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", gym.getGymId(), gym.getGymOwnerId(), gym.getGymName(), gym.getGymCity(), gym.getGymArea());
+        }
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+    }
+
+    private void showCustomerBookings(List<FlipFitBooking> bookings) {
+        System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("All Bookings%n");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", "Customer ID", "Slot ID", "Booking Status", "Payment ID", "Booking Date");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        for(FlipFitBooking booking: bookings){
+            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", booking.getCustomerId(), booking.getSlotId(), booking.getBookingStatus(), booking.getPaymentId(), booking.getBookingDate());
+        }
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+    }
 
     public boolean showMenu(){
         System.out.println("\n------------------------------\nWelcome to FlipFit Customer Client");
@@ -42,7 +68,8 @@ public class CustomerClient {
             case 1:
                 System.out.println("Enter city: ");
                 String city = scanner.nextLine();
-                System.out.println("Displaying all available gyms in " + city);
+                List<FlipFitGym> allGyms = flipFitGymOwnerService.getAll(city);
+                showAllGyms(allGyms);
                 break;
             case 2:
                 System.out.println("Enter gymId: ");
@@ -62,7 +89,9 @@ public class CustomerClient {
                 flipFitCustomerService.createBooking(flipFitCustomer.getCustomerId(), slotId, transactionId);
                 break;
             case 4:
-                System.out.println("Displaying all booked slots");
+                System.out.println("Enter your Customer ID: ");
+                int customerId = Integer.parseInt(scanner.nextLine());
+                List<FlipFitBooking> bookings = flipFitCustomerService.getCustomerBookings(customerId);
                 break;
             case 5:
                 System.out.println("Enter bookingId: ");

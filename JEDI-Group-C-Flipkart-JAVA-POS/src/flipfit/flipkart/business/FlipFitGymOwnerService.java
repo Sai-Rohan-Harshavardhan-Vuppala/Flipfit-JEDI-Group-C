@@ -1,12 +1,10 @@
 package flipfit.flipkart.business;
 
+import flipfit.flipkart.DAO.FlipFitBookingDAO;
 import flipfit.flipkart.DAO.FlipFitGymDAO;
 import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
 import flipfit.flipkart.DAO.FlipFitUserDAO;
-import flipfit.flipkart.bean.FlipFitGym;
-import flipfit.flipkart.bean.FlipFitGymOwner;
-import flipfit.flipkart.bean.FlipFitSlot;
-import flipfit.flipkart.bean.FlipFitUser;
+import flipfit.flipkart.bean.*;
 import flipfit.flipkart.helper.Helper;
 
 import java.time.*;
@@ -65,8 +63,8 @@ public class FlipFitGymOwnerService {
 
     }
 
-    public void getGymByGymId(){
-
+    public List<FlipFitGym> getGymByGymOwnerId(int gymOwnerId){
+        return flipFitGymDAO.getGymByGymOwnerId(gymOwnerId);
     }
     /*
      * Slot services begin from here ----------------------->
@@ -108,6 +106,12 @@ public class FlipFitGymOwnerService {
 
     public List<FlipFitGym> getPendingGyms() {
         return flipFitGymDAO.getPendingGyms();
+    }
+    public List<FlipFitGym> getAll(String gymCity) {
+        return flipFitGymDAO.getAll(gymCity);
+    }
+    public List<FlipFitBooking> getAllBookings() {
+        return FlipFitBookingDAO.getAllBookings();
     }
 
     /*

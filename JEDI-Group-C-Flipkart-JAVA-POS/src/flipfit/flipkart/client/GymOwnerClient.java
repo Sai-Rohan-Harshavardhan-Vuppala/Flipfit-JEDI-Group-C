@@ -1,5 +1,6 @@
 package flipfit.flipkart.client;
 
+import flipfit.flipkart.bean.FlipFitGym;
 import flipfit.flipkart.bean.FlipFitGymOwner;
 import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
@@ -7,6 +8,7 @@ import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
 
 import java.util.Scanner;
+import java.util.List;
 
 public class GymOwnerClient {
     private FlipFitAdminService flipFitAdminService;
@@ -23,16 +25,27 @@ public class GymOwnerClient {
         this.flipFitGymOwner = flipFitGymOwner;
     }
 
-
+    private void showGyms(List<FlipFitGym> gyms) {
+        System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("Your Gyms%n");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", "GYM ID", "GYM NAME", "GYM CITY", "GYM AREA", "GYM STATUS");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        for(FlipFitGym gym: gyms){
+            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", gym.getGymId(), gym.getGymName(), gym.getGymCity(), gym.getGymArea(), gym.getStatus());
+        }
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+    }
     public boolean showMenu(){
         System.out.println("\n------------------------------\nWelcome to FlipFit Gym Owner Client");
         System.out.println("1. Add Gym");
         System.out.println("2. Update Gym");
         System.out.println("3. Delete Gym");
-        System.out.println("4. Add Slot");
-        System.out.println("5. Update Slot");
-        System.out.println("6. Delete Slot");
-        System.out.println("7. Logout");
+        System.out.println("4. View Gyms");
+        System.out.println("5. Add Slot");
+        System.out.println("6. Update Slot");
+        System.out.println("7. Delete Slot");
+        System.out.println("8. Logout");
 
 
         Scanner scanner = new Scanner(System.in);
@@ -65,6 +78,12 @@ public class GymOwnerClient {
                 System.out.println("Gym deleted Successfully");
                 break;
             case 4:
+                System.out.println("Enter Gym Owner Id: ");
+                int gymOwnerId = Integer.parseInt(scanner.nextLine());
+                List<FlipFitGym> gyms = flipFitGymOwnerService.getGymByGymOwnerId(gymOwnerId);
+                showGyms(gyms);
+                break;
+            case 5:
                 System.out.println("Enter gymID: ");
                 gymId = scanner.nextLine();
 
@@ -73,7 +92,7 @@ public class GymOwnerClient {
 
                 System.out.println("Slot Added Successfully");
                 break;
-            case 5:
+            case 6:
                 System.out.println("Enter Gym Id: ");
                 gymId = scanner.nextLine();
 
@@ -85,13 +104,13 @@ public class GymOwnerClient {
 
                 System.out.println("Slot updated Successfully");
                 break;
-            case 6:
+            case 7:
                 System.out.println("Enter slotId: ");
                 slotId = scanner.nextLine();
 
                 System.out.println("Slot deleted Successfully");
                 break;
-            case 7:
+            case 8:
                 System.out.println("Logout Successfully");
                 return true;
         }

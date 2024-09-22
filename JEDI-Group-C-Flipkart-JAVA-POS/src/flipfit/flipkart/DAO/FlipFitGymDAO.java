@@ -63,6 +63,63 @@ public class FlipFitGymDAO {
         return null;
     }
 
+    public List<FlipFitGym> getAll(String gymCity) {
+        List<FlipFitGym> gyms = new ArrayList<>();
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT * FROM FlipFitGyms WHERE status = ? AND gymCity = ?";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setString(1, "approved");
+            stmt.setString(2, gymCity);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                FlipFitGym gym = new FlipFitGym();
+                gym.setGymName(rs.getString("gymName"));
+                gym.setGymCity(rs.getString("gymCity"));
+                gym.setGymArea(rs.getString("gymArea"));
+                gym.setStatus(rs.getString("status"));
+                gym.setGymOwnerId(rs.getInt("gymOwnerId"));
+                gyms.add(gym);
+            }
+            con.close();
+            if(gyms.isEmpty()){
+                System.out.println("No Gyms found in City: " +  gymCity);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return gyms;
+    }
+
+    public List<FlipFitGym> getGymByGymOwnerId(int gymOwnerId) {
+        List<FlipFitGym> gyms = new ArrayList<>();
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT * FROM FlipFitGyms WHERE gymOwnerId = ?";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setInt(1, gymOwnerId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                FlipFitGym gym = new FlipFitGym();
+                gym.setGymId(rs.getInt("gymId"));
+                gym.setGymName(rs.getString("gymName"));
+                gym.setGymCity(rs.getString("gymCity"));
+                gym.setGymArea(rs.getString("gymArea"));
+                gym.setStatus(rs.getString("status"));
+                gyms.add(gym);
+            }
+            con.close();
+            if(gyms.isEmpty()){
+                System.out.println("No Gyms found for Gym Owner Id: " +  gymOwnerId);
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return gyms;
+    }
+
     public boolean update(String gymName, String gymCity, String gymArea, String gymStatus, int gymOwnerId, int gymId) {
         try{
             Connection con = Util.connectToDatabase();
