@@ -113,4 +113,45 @@ public class FlipFitGymOwnerDAO {
         }
         return pendingflipFitGymOwners;
     }
+
+    public List<FlipFitGymOwner> getAllGymOwners() {
+        List<FlipFitGymOwner> gymOwnersList = new ArrayList<>();
+
+        try {
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT FlipFitGymOwners.gymOwnerId, FlipFitGymOwners.accountNumber, " +
+                    "FlipFitUsers.userId, FlipFitUsers.username, FlipFitUsers.password, " +
+                    "FlipFitUsers.email, FlipFitUsers.name, FlipFitUsers.roleId, FlipFitUsers.status " +
+                    "FROM FlipFitGymOwners " +
+                    "JOIN FlipFitUsers ON FlipFitGymOwners.userId = FlipFitUsers.userId";
+
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Create a FlipFitGymOwner object
+                FlipFitGymOwner gymOwner = new FlipFitGymOwner();
+                gymOwner.setGymOwnerId(rs.getInt("gymOwnerId"));
+                gymOwner.setAccountNumber(rs.getString("accountNumber"));
+
+                // Setting user details from FlipFitUsers
+                gymOwner.setUserId(rs.getInt("userId"));
+                gymOwner.setUsername(rs.getString("username"));
+                gymOwner.setPassword(rs.getString("password"));
+                gymOwner.setEmail(rs.getString("email"));
+                gymOwner.setName(rs.getString("name"));
+                gymOwner.setRoleId(rs.getInt("roleId"));
+                gymOwner.setStatus(rs.getString("status"));
+
+                // Add the gymOwner object to the list
+                gymOwnersList.add(gymOwner);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return gymOwnersList;
+    }
+
 }

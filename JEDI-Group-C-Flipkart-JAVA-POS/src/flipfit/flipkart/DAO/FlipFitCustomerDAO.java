@@ -51,4 +51,35 @@ public class FlipFitCustomerDAO {
         }
         return null;
     }
+
+
+    public List<FlipFitCustomer> getAllCustomers() {
+        List<FlipFitCustomer> customers = new ArrayList<>();
+        try {
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT u.userId, u.username, u.email, u.name, c.customerId, c.phone " +
+                    "FROM FlipFitUsers u " +
+                    "INNER JOIN FlipFitCustomers c ON u.userId = c.userId";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            ResultSet result = stmt.executeQuery();
+
+            while (result.next()) {
+                FlipFitUser user = new FlipFitUser();
+                user.setUserId(result.getInt("userId"));
+                user.setUsername(result.getString("username"));
+                user.setEmail(result.getString("email"));
+                user.setName(result.getString("name"));
+
+                FlipFitCustomer customer = new FlipFitCustomer(user);
+                customer.setCustomerId(result.getInt("customerId"));
+                customer.setPhone(result.getString("phone"));
+
+                customers.add(customer);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return customers;
+    }
 }

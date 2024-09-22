@@ -133,10 +133,30 @@ public class FlipFitAdminClient {
                 validateSlot();
                 break;
             case 10:
-                System.out.println("List of customers displayed");
+                System.out.println("List of Customers displayed \n--------------------------");
+                FlipFitCustomerService customerService = new FlipFitCustomerService();
+                List<FlipFitCustomer> customers = customerService.getAllCustomers();
+                for (FlipFitCustomer customer : customers) {
+                    System.out.println("Customer ID: " + customer.getCustomerId());
+                    System.out.println("Username: " + customer.getUsername());
+                    System.out.println("Email: " + customer.getEmail());
+                    System.out.println("Phone: " + customer.getPhone());
+                    System.out.println("--------------------------");
+                }
+
                 break;
             case 11:
-                System.out.println("List of gym owners displayed");
+                System.out.println("List of gym owners displayed\n--------------------------");
+                FlipFitGymOwnerService gymOwnerService = new FlipFitGymOwnerService();
+                List<FlipFitGymOwner> gymOwners = gymOwnerService.getAllGymOwners();
+
+                for (FlipFitGymOwner gymOwner : gymOwners) {
+                    System.out.println("Gym Owner ID: " + gymOwner.getGymOwnerId());
+                    System.out.println("Username: " + gymOwner.getUsername());
+                    System.out.println("Email: " + gymOwner.getEmail());
+                    System.out.println("Account Number: " + gymOwner.getAccountNumber());
+                    System.out.println("--------------------------");
+                }
                 break;
             case 12:
                 System.out.println("List of bookings displayed");
