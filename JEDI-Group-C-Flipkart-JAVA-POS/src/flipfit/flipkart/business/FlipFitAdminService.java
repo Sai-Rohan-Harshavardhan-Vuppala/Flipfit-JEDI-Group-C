@@ -1,6 +1,7 @@
 package flipfit.flipkart.business;
 
 import flipfit.flipkart.DAO.FlipFitAdminDAO;
+import flipfit.flipkart.DAO.FlipFitGymDAO;
 import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
 import flipfit.flipkart.DAO.FlipFitUserDAO;
 import flipfit.flipkart.bean.*;
@@ -40,9 +41,26 @@ public class FlipFitAdminService {
         System.out.println("Gym Owner request with User ID " + userId + " was rejected");
     }
 
-    public boolean approveGym(FlipFitGym gym) {
-        System.out.println("Gym approved"+gym);
-        return true;
+    public void approveGym(int gymId) {
+        FlipFitGymDAO flipFitGymDAO = new FlipFitGymDAO();
+        FlipFitGym gym = flipFitGymDAO.get(gymId);
+        if(flipFitGymDAO.update(gym.getGymName(), gym.getGymCity(), gym.getGymArea(),"approved", gym.getGymOwnerId(), gym.getGymId())){
+            System.out.println("Gym approved with Gym ID " + gymId + " was approved");
+        }
+        else{
+            System.out.println("Failed to approve gym with Gym ID " + gymId + " was approved");
+
+        }
+    }
+
+    public void rejectGym(int gymId) {
+        FlipFitGymDAO flipFitGymDAO = new FlipFitGymDAO();
+        if(flipFitGymDAO.delete(gymId)){
+            System.out.println("Gym with Gym ID" + gymId + " was rejected");
+        }
+        else{
+            System.out.println("Gym with Gym ID" + gymId + " does not exist");
+        }
     }
 
     public boolean approveSlot(FlipFitSlot slot) {

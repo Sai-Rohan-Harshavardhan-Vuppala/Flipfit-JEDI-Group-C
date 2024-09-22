@@ -2,26 +2,30 @@ package flipfit.flipkart.bean;
 
 public class FlipFitGym {
     private int gymId;
-
-    public FlipFitGym(int gymOwnerId, String gym_name, String gym_city) {
-        this.gymOwnerId = gymOwnerId;
-        this.gym_name = gym_name;
-        this.gym_city = gym_city;
-        this.status = "pending";
-    }
-
     private int gymOwnerId;
-    private String gym_name;
-    private String gym_city;
+    private String gymName;
+    private String gymCity;
+    private String gymArea;
     private String status;
 
+    public FlipFitGym(int gymOwnerId, String gymName, String gymCity, String gymArea, String status) {
+        this.gymOwnerId = gymOwnerId;
+        this.gymName = gymName;
+        this.gymCity = gymCity;
+        this.status = status;
+        this.gymArea = gymArea;
+    }
+
+    public FlipFitGym() {
+
+    }
 
 
     public int getGymId() {
         return gymId;
     }
-    public void setGym_id(int gym_id) {
-        this.gymId = gym_id;
+    public void setGymId(int gymId) {
+        this.gymId = gymId;
     }
 
     public int getGymOwnerId() {
@@ -32,22 +36,22 @@ public class FlipFitGym {
         this.gymOwnerId = gymOwnerId;
     }
 
-    public String getGym_name() {
+    public String getGymName() {
 
-        return gym_name;
+        return gymName;
     }
-    public void setGym_name(String gym_name) {
+    public void setGymName(String gymName) {
 
-        this.gym_name = gym_name;
+        this.gymName = gymName;
     }
 
-    public String getGym_city() {
+    public String getGymCity() {
 
-        return gym_city;
+        return gymCity;
     }
-    public void setGym_city(String gym_city) {
+    public void setGymCity(String gymCity) {
 
-        this.gym_city = gym_city;
+        this.gymCity = gymCity;
     }
 
     public String getStatus() {
@@ -60,5 +64,11 @@ public class FlipFitGym {
         this.status = status;
     }
 
+    public String getGymArea() {
+        return gymArea;
+    }
 
+    public void setGymArea(String gymArea) {
+        this.gymArea = gymArea;
+    }
 }
