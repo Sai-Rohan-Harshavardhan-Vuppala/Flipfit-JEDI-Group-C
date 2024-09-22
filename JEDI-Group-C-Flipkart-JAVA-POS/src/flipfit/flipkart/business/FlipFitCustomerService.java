@@ -100,6 +100,9 @@ public class FlipFitCustomerService {
         return FlipFitBookingDAO.getCustomerBookings(customerId);
     }
 
+    public List<FlipFitCustomer> getAllCustomers() {
+        return flipFitCustomerDAO.getAllCustomers();
+    }
     /*
      * Booking services end here ------------------------------->
      */
