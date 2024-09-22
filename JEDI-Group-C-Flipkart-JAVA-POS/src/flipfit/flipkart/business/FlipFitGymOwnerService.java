@@ -113,5 +113,10 @@ public class FlipFitGymOwnerService {
     /*
      * Slot services end from here ------------------------->
      */
+
+    public List<FlipFitGymOwner> getAllGymOwners() {
+        return flipFitGymOwnerDAO.getAllGymOwners();
+    }
+
 }
 

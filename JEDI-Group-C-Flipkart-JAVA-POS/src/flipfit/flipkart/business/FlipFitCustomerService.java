@@ -50,6 +50,7 @@ public class FlipFitCustomerService {
     }
 
     public FlipFitCustomer getCustomerByUser(FlipFitUser user){
+
         return flipFitCustomerDAO.getByUser(user);
     }
     /*
@@ -94,7 +95,9 @@ public class FlipFitCustomerService {
         List<FlipFitBooking> bookings = new ArrayList<>();
         return bookings;
     }
-
+    public List<FlipFitCustomer> getAllCustomers() {
+        return flipFitCustomerDAO.getAllCustomers();
+    }
     /*
      * Booking services end here ------------------------------->
      */
