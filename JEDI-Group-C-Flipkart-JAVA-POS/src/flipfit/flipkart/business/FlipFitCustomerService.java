@@ -1,5 +1,6 @@
 package flipfit.flipkart.business;
 
+import flipfit.flipkart.DAO.FlipFitBookingDAO;
 import flipfit.flipkart.DAO.FlipFitCustomerDAO;
 import flipfit.flipkart.DAO.FlipFitUserDAO;
 import flipfit.flipkart.bean.FlipFitBooking;
@@ -50,7 +51,6 @@ public class FlipFitCustomerService {
     }
 
     public FlipFitCustomer getCustomerByUser(FlipFitUser user){
-
         return flipFitCustomerDAO.getByUser(user);
     }
     /*
@@ -95,6 +95,11 @@ public class FlipFitCustomerService {
         List<FlipFitBooking> bookings = new ArrayList<>();
         return bookings;
     }
+
+    public List<FlipFitBooking> getCustomerBookings(int customerId){
+        return FlipFitBookingDAO.getCustomerBookings(customerId);
+    }
+
     public List<FlipFitCustomer> getAllCustomers() {
         return flipFitCustomerDAO.getAllCustomers();
     }

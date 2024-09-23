@@ -101,3 +101,6 @@ INSERT INTO FlipFitUsers (username, password, email, name, roleId, status) VALUE
 INSERT INTO FlipFitCustomers (userId, phone) VALUES (2, "7075014903");
 INSERT INTO FlipFitUsers (username, password, email, name, roleId, status) VALUES ("sankalp", "sankalp@123", "sankalpg38@gmail.com", "Sankalp Garg", 3, "whitelisted");
 INSERT INTO FlipFitGymOwners (userId, accountNumber) VALUES (3, "IDBI012345600K023");
+-- INSERT INTO FlipFitGyms (username, password, email, name, roleId, status) VALUES ("harshavardhan", "harsh@123", "harsha@gmail.com", "Harshavardhan", 1, "whitelisted");
+INSERT INTO FlipFitGyms (gymId, gymOwnerId, gymName, gymCity, gymArea, status) VALUES (121, 1, "MyGym", "Bangalore", "Bellandur", "approved");
+INSERT INTO FlipFitGyms (gymId, gymOwnerId, gymName, gymCity, gymArea, status) VALUES (134, 1, "MyGym", "Bangalore", "Bellandur", "pending");

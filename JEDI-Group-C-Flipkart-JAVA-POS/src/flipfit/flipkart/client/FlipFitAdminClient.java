@@ -63,6 +63,17 @@ public class FlipFitAdminClient {
         }
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
     }
+    private void showAllBookings(List<FlipFitBooking> allBookings) {
+        System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("All Bookings%n");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s | %-20s |%n", "Customer ID", "Slot ID", "Booking Status", "Payment ID", "Booking Date", "Waitlist Rank");
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+        for(FlipFitBooking booking: allBookings){
+            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s | %-20s |%n", booking.getCustomerId(), booking.getSlotId(), booking.getBookingStatus(), booking.getPaymentId(), booking.getBookingDate(), booking.getWaitListRank());
+        }
+        System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
+    }
 
     public boolean showMenu(){
         System.out.println("\n------------------------------\nWelcome to FlipFit Admin Client");
@@ -163,6 +174,8 @@ public class FlipFitAdminClient {
                 break;
             case 12:
                 System.out.println("List of bookings displayed");
+                List<FlipFitBooking> allBookings = flipFitGymOwnerService.getAllBookings();
+                showAllBookings(allBookings);
                 break;
             case 13:
                 System.out.println("Logged out successfully");

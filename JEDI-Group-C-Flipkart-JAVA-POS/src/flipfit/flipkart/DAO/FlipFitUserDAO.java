@@ -58,7 +58,7 @@ public class FlipFitUserDAO {
             if(!userList.isEmpty()){
                 System.out.println("User found");
                 con.close();
-                return userList.getFirst();
+                return userList.get(0);
             }
             System.out.println("No User found");
             con.close();
@@ -116,7 +116,7 @@ public class FlipFitUserDAO {
                 user.setRoleId(rs.getInt("roleId"));
                 userList.add(user);
                 con.close();
-                return userList.getFirst();
+                return userList.get(0);
             }
             else {
                 System.out.println("No user with id " + userId + "not found");

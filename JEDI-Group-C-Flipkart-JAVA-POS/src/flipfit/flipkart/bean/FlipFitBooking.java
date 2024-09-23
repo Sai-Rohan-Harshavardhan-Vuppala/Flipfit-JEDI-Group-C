@@ -11,6 +11,18 @@ public class FlipFitBooking {
     private int waitListRank;
     private int paymentId;
 
+    public FlipFitBooking() {
+//        this.customerId = customerId;
+//        this.slotId = slotId;
+//        this.bookingStatus = "Booked";
+//        this.paymentId = paymentId;
+//        this.waitListRank = -1;
+        /*
+        waitListRank = -1 -> booking is pending
+        waitListRank = 0 -> booking is confirmed
+        waitListRank > 0 -> booking is waitlisted
+         */
+    }
     public FlipFitBooking(int customerId, int slotId, int paymentId) {
         this.customerId = customerId;
         this.slotId = slotId;
@@ -23,6 +35,11 @@ public class FlipFitBooking {
         waitListRank > 0 -> booking is waitlisted
          */
     }
+
+    public void setPaymentId(int paymentId) {
+        this.paymentId = paymentId;
+    }
+
     public int getPaymentId(){
         return paymentId;
     }
