@@ -1,34 +1,62 @@
 package flipfit.flipkart.bean;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class FlipFitBooking {
     private int bookingId;
     private int customerId;
     private int slotId;
-    private Date bookingDate;
+    private Date slotDate;
+    private Time startTime;
+    private Time endTime;
     private String bookingStatus;
-    private int waitListRank;
     private int paymentId;
+    private Timestamp createdAt;
+
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getSlotDate() {
+        return slotDate;
+    }
+
+    public void setSlotDate(Date slotDate) {
+        this.slotDate = slotDate;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
+    }
+
+
+
 
     public FlipFitBooking() {
-//        this.customerId = customerId;
-//        this.slotId = slotId;
-//        this.bookingStatus = "Booked";
-//        this.paymentId = paymentId;
-//        this.waitListRank = -1;
-        /*
-        waitListRank = -1 -> booking is pending
-        waitListRank = 0 -> booking is confirmed
-        waitListRank > 0 -> booking is waitlisted
-         */
-    }
-    public FlipFitBooking(int customerId, int slotId, int paymentId) {
-        this.customerId = customerId;
-        this.slotId = slotId;
-        this.bookingStatus = "Booked";
-        this.paymentId = paymentId;
-        this.waitListRank = -1;
+
         /*
         waitListRank = -1 -> booking is pending
         waitListRank = 0 -> booking is confirmed
@@ -63,13 +91,6 @@ public class FlipFitBooking {
         this.slotId = slotId;
     }
 
-    public Date getBookingDate() {
-        return bookingDate;
-    }
-    public void setBookingDate(Date bookingDate) {
-        this.bookingDate = bookingDate;
-    }
-
     public String getBookingStatus() {
         return bookingStatus;
 
@@ -78,12 +99,8 @@ public class FlipFitBooking {
         this.bookingStatus = bookingStatus;
     }
 
-    public int getWaitListRank() {
-        return waitListRank;
-    }
 
-    public void setWaitListRank(int waitListRank) {
-        this.waitListRank = waitListRank;
+    public Timestamp getcreatedAt() {
+        return createdAt;
     }
-
 }

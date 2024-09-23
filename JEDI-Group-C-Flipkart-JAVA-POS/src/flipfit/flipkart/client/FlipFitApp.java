@@ -34,8 +34,8 @@ public class FlipFitApp {
         System.out.println("1. Login");
         System.out.println("2. Register as Flipfit Customer");
         System.out.println("3. Register as Flipfit Gym Owner");
-        System.out.println("4. Update Password");
-        System.out.println("5. Exit");
+//        System.out.println("4. Update Password");
+        System.out.println("4. Exit");
 
         int choice = Integer.parseInt(scanner.nextLine());
         switch (choice) {
@@ -48,10 +48,10 @@ public class FlipFitApp {
             case 3:
                 registerGymOwner();
                 break;
+//            case 4:
+//                updatePassword();
+//                break;
             case 4:
-                updatePassword();
-                break;
-            case 5:
                 System.out.println("Exiting...");
                 return true;
             default:

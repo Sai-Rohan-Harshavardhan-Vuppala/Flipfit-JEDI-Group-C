@@ -1,9 +1,6 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.DAO.FlipFitAdminDAO;
-import flipfit.flipkart.DAO.FlipFitGymDAO;
-import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
-import flipfit.flipkart.DAO.FlipFitUserDAO;
+import flipfit.flipkart.DAO.*;
 import flipfit.flipkart.bean.*;
 import flipfit.flipkart.helper.Helper;
 
@@ -63,11 +60,38 @@ public class FlipFitAdminService {
         }
     }
 
-    public boolean approveSlot(FlipFitSlot slot) {
-        System.out.println("Slot approved"+slot);
-        return true;
+    public void approveSlot(int slotId) {
+        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+        FlipFitSlot flipFitSlot = flipFitSlotDAO.get(slotId);
+        if(flipFitSlot == null){
+            System.out.println("Slot " + slotId + " doesn't exist");
+        }
+        else{
+            if(flipFitSlot.getStatus() == "approved"){
+                System.out.println("Slot " + slotId + " is already approved");
+            }
+            else{
+                boolean result = flipFitSlotDAO.update(flipFitSlot.getSlotId(), flipFitSlot.getGymId(), flipFitSlot.getSlotDate().toString(), flipFitSlot.getStartTime().toString(), flipFitSlot.getEndTime().toString(), flipFitSlot.getSeatsAvailable(), flipFitSlot.getPrice(), "approved", flipFitSlot.getTotalSeats());
+                if(result){
+                    System.out.println("Slot " + slotId + " was approved");
+                }
+                else{
+                    System.out.println("Incorrect details entered. Slot " + slotId + " approval failed.");
+                }
+            }
+        }
     }
 
+
+    public void rejectSlot(int rejectedSlotId) {
+        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+        if(flipFitSlotDAO.delete(rejectedSlotId)){
+            System.out.println("Slot " + rejectedSlotId + " was rejected");
+        }
+        else{
+            System.out.println("Slot Id does not exist.");
+        }
+    }
 
     /*
      * Notification services begin from here --------------------->

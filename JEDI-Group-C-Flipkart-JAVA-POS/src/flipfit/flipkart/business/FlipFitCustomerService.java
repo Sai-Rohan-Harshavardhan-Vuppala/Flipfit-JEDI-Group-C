@@ -3,9 +3,7 @@ package flipfit.flipkart.business;
 import flipfit.flipkart.DAO.FlipFitBookingDAO;
 import flipfit.flipkart.DAO.FlipFitCustomerDAO;
 import flipfit.flipkart.DAO.FlipFitUserDAO;
-import flipfit.flipkart.bean.FlipFitBooking;
-import flipfit.flipkart.bean.FlipFitCustomer;
-import flipfit.flipkart.bean.FlipFitUser;
+import flipfit.flipkart.bean.*;
 import flipfit.flipkart.helper.Helper;
 
 import java.util.ArrayList;
@@ -14,9 +12,11 @@ import java.util.List;
 
 public class FlipFitCustomerService {
     private FlipFitCustomerDAO flipFitCustomerDAO;
+    private FlipFitBookingDAO flipFitBookingDAO;
 
     public FlipFitCustomerService() {
         flipFitCustomerDAO = new FlipFitCustomerDAO();
+        flipFitBookingDAO = new FlipFitBookingDAO();
     }
 
     public FlipFitCustomer login(String email, String enteredPassword){
@@ -63,31 +63,75 @@ public class FlipFitCustomerService {
         return bookings;
     }
 
-    public FlipFitBooking createBooking(int customerId, int slotId, String transactionId){
+    public boolean createBooking(int customerId, int slotId, String transactionId){
         // Logic for creating a booking
         FlipFitPaymentService paymentService = new FlipFitPaymentService();
-        int paymentId = paymentService.createPayment(transactionId);
-        FlipFitBooking booking = new FlipFitBooking(customerId, slotId, paymentId);
-        System.out.println("Created booking successfully");
-        return booking;
+        FlipFitPayment payment = paymentService.createPayment(transactionId, customerId);
+        if(payment == null){
+            System.out.println("Transaction id must be unique.");
+            return false;
+        }
+        FlipFitGymOwnerService gymOwnerService = new FlipFitGymOwnerService();
+        FlipFitSlot slot = gymOwnerService.getSlot(slotId);
+        List<FlipFitBooking> bookings = getBookingsByCustomerIdAndDate(customerId, slot.getSlotDate());
+        FlipFitBookingDAO flipFitBookingDAO = new FlipFitBookingDAO();
+        for(FlipFitBooking booking : bookings){
+            if(Helper.checkIfSlotsIntersect(booking.getStartTime(), booking.getEndTime(), slot.getStartTime(), slot.getEndTime())){
+                cancelBooking(booking.getCustomerId(), booking.getBookingId());
+            }
+        }
+        FlipFitBookingDAO bookingDAO = new FlipFitBookingDAO();
+        String bookingStatus = slot.getSeatsAvailable() > 0 ? "confirmed" : "waitlisted";
+        int seatsAvailable = bookingStatus == "confirmed" ? slot.getSeatsAvailable() - 1 : 0;
+        if(bookingDAO.create(customerId, slotId, payment.getPaymentId(), bookingStatus)){
+            System.out.println("Your booking is " + bookingStatus);
+            FlipFitGymOwnerService flipFitGymownerService = new FlipFitGymOwnerService();
+            flipFitGymownerService.updateSlot(slot.getSlotId(), slot.getGymId(), slot.getSlotDate().toString(), slot.getStartTime().toString(), slot.getEndTime().toString(), seatsAvailable, slot.getPrice(), slot.getTotalSeats(), "approved");
+            return true;
+        }
+        System.out.println("Invalid details. Booking failed");
+        return false;
     }
 
-    public boolean confirmBooking(int paymentId, int amount){
-        // get the payment record and validate the amount
-
-        // confirm or reject the booking
-        return true;
+    public List<FlipFitBooking> getBookingsByCustomerIdAndDate(int customerId, Date date){
+        FlipFitBookingDAO flipFitBookingDAO = new FlipFitBookingDAO();
+        return flipFitBookingDAO.getByCustomerIdAndDate(customerId, date.toString());
     }
 
-    public Boolean cancelBooking(int bookingId){
-        System.out.println("Booking with bookingId: " + bookingId + " cancelled");
-        return true;
+
+    public boolean cancelBooking(int customerId, int bookingId){
+        FlipFitBooking booking = flipFitBookingDAO.get(bookingId);
+        if(customerId != booking.getCustomerId()){
+            System.out.println("Booking ID not present in your bookings. Please enter a valid Booking ID.");
+            return false;
+        }
+        if(booking == null){
+            System.out.println("Booking with id " + bookingId + " does not exist");
+            return false;
+        }
+        System.out.println(booking.toString());
+        if(booking.getBookingStatus().equals("confirmed")){
+            System.out.println("Booking with id " + bookingId + " has confirmed status");
+            if(confirmFirstWaitlistedBooking(booking.getSlotId()) == false){
+                FlipFitGymOwnerService gymOwnerService = new FlipFitGymOwnerService();
+                FlipFitSlot slot = gymOwnerService.getSlot(booking.getSlotId());
+                gymOwnerService.updateSlot(slot.getSlotId(), slot.getGymId(), slot.getSlotDate().toString(), slot.getStartTime().toString(), slot.getEndTime().toString(), slot.getSeatsAvailable() + 1, slot.getPrice(), slot.getTotalSeats(), slot.getStatus());
+            }
+        }
+        return flipFitBookingDAO.delete(bookingId);
     }
 
-    public void waitList(int bookingId){
-
-        System.out.println("Booking with bookingId: " + bookingId + " waitlisted");
-
+    private boolean confirmFirstWaitlistedBooking(int slotId) {
+        FlipFitBooking booking = flipFitBookingDAO.getfirstCreatedBookingBySlotIdAndStatus(slotId, "waitlisted");
+        if(booking == null){
+            System.out.println("No waitlisted bookings exist in slot with slot ID " + slotId);
+            return false;
+        }
+        else{
+            System.out.println("Waitlisted booking found");
+            flipFitBookingDAO.update(booking.getBookingId(), booking.getCustomerId(), booking.getSlotId(), booking.getPaymentId(), "confirmed");
+            return true;
+        }
     }
 
     public List<FlipFitBooking> getWaitListedBookings(){
@@ -97,7 +141,7 @@ public class FlipFitCustomerService {
     }
 
     public List<FlipFitBooking> getCustomerBookings(int customerId){
-        return FlipFitBookingDAO.getCustomerBookings(customerId);
+        return FlipFitBookingDAO.getByCustomerId(customerId);
     }
 
     public List<FlipFitCustomer> getAllCustomers() {

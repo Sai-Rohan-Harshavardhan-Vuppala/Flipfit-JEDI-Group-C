@@ -83,14 +83,14 @@ public class FlipFitGymOwnerDAO {
         }
     }
 
-    public List<FlipFitGymOwner> getPendingGymOwners() {
+    public List<FlipFitGymOwner> getByStatus(String status) {
 
         List<FlipFitGymOwner> pendingflipFitGymOwners = new ArrayList<>();
         try{
             Connection con = Util.connectToDatabase();
             String queryStr = "SELECT * FROM FlipFitGymOwners LEFT JOIN FlipFitUsers ON FlipFitGymOwners.userId = FlipFitUsers.userId WHERE FlipFitUsers.status = ?";
             PreparedStatement stmt = con.prepareStatement(queryStr);
-            stmt.setString(1, "pending");
+            stmt.setString(1, status);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
@@ -112,6 +112,31 @@ public class FlipFitGymOwnerDAO {
             System.out.println(e);
         }
         return pendingflipFitGymOwners;
+    }
+
+    public FlipFitGymOwner get(int gymOwnerId) {
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT * FROM FlipFitGymOwners WHERE gymOwnerId = ?";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setInt(1, gymOwnerId);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                System.out.println("Gym owner found");
+                FlipFitGymOwner gymOwner = new FlipFitGymOwner();
+                gymOwner.setGymOwnerId(rs.getInt("gymOwnerId"));
+                gymOwner.setAccountNumber(rs.getString("accountNumber"));
+                gymOwner.setUserId(rs.getInt("userId"));
+                con.close();
+                return gymOwner;
+            }
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     public List<FlipFitGymOwner> getAllGymOwners() {

@@ -1,22 +1,39 @@
 package flipfit.flipkart.bean;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalTime;
 
 public class FlipFitSlot {
     private int slotId;
     private String status;
     private int gymId;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private int seats_available;
+    private Time startTime;
+    private Time endTime;
+    private int seatsAvailable;
     private double price;
+    private Date slotDate;
+    private int totalSeats;
 
-    public FlipFitSlot(int gymId, LocalTime startTime, LocalTime endTime, int seats_available, double price) {
+
+    public FlipFitSlot(int gymId, Time startTime, Time endTime, int seatsAvailable, double price) {
         this.gymId = gymId;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.seats_available = seats_available;
+        this.seatsAvailable = seatsAvailable;
         this.price = price;
+    }
+
+    public FlipFitSlot() {
+
+    }
+
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(int totalSeats) {
+        this.totalSeats = totalSeats;
     }
     //waitlist we need to add then only we will add its attributes in it
 
@@ -44,27 +61,47 @@ public class FlipFitSlot {
         this.gymId = gymId;
     }
 
-    public LocalTime getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStart_tine(LocalTime startTime) {
+    public void setStartTine(Time startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 
-    public int getSeat_available() {
-        return seats_available;
+    public int getSeatsAvailable() {
+        return seatsAvailable;
     }
 
-    public void setSeat_available(int seats_available) {
-        this.seats_available = seats_available;
+    public void setSeatsAvailable(int seatsAvailable) {
+        this.seatsAvailable = seatsAvailable;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setSlotDate(Date slotDate) {
+        this.slotDate = slotDate;
+    }
+
+    public Date getSlotDate() {
+        return slotDate;
     }
 }

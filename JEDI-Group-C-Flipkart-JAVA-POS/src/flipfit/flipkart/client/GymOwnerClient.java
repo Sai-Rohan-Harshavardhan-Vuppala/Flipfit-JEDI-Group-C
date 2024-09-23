@@ -2,13 +2,15 @@ package flipfit.flipkart.client;
 
 import flipfit.flipkart.bean.FlipFitGym;
 import flipfit.flipkart.bean.FlipFitGymOwner;
+import flipfit.flipkart.bean.FlipFitSlot;
 import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
+import flipfit.flipkart.helper.Helper;
 
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class GymOwnerClient {
     private FlipFitAdminService flipFitAdminService;
@@ -39,13 +41,14 @@ public class GymOwnerClient {
     public boolean showMenu(){
         System.out.println("\n------------------------------\nWelcome to FlipFit Gym Owner Client");
         System.out.println("1. Add Gym");
-        System.out.println("2. Update Gym");
-        System.out.println("3. Delete Gym");
-        System.out.println("4. View Gyms");
-        System.out.println("5. Add Slot");
-        System.out.println("6. Update Slot");
-        System.out.println("7. Delete Slot");
-        System.out.println("8. Logout");
+//        System.out.println("2. Update Gym");
+//        System.out.println("3. Delete Gym");
+        System.out.println("2. Add Slot");
+//        System.out.println("5. Update Slot");
+//        System.out.println("6. Delete Slot");
+        System.out.println("3. View all gyms");
+        System.out.println("4. View slots in a gym");
+        System.out.println("5. Logout");
 
 
         Scanner scanner = new Scanner(System.in);
@@ -60,57 +63,80 @@ public class GymOwnerClient {
 
                 System.out.println("Enter Area (Locality) in the city: ");
                 String gymArea = scanner.nextLine();
-                flipFitGymOwnerService.createGym(gymName, gymCity, gymArea, flipFitGymOwner.getGymOwnerId());
+                if(flipFitGymOwnerService.createGym(gymName, gymCity, gymArea, flipFitGymOwner.getGymOwnerId()) == true){
+                    System.out.println("Gym added successfully!");
+                }
+                else{
+                    System.out.println("Gym addition failed!");
+                }
                 break;
+//            case 2:
+//                System.out.println("Enter Gym Id: ");
+//                String gymId = scanner.nextLine();
+//
+//                System.out.println("Enter Updated Gym Name: ");
+//                String updatedGym = scanner.nextLine();
+//
+//                System.out.println("Gym updated Successfully");
+//                break;
+//            case 3:
+//                System.out.println("Enter Gym Id: ");
+//                gymId = scanner.nextLine();
+//
+//                System.out.println("Gym deleted Successfully");
+//                break;
             case 2:
-                System.out.println("Enter Gym Id: ");
-                String gymId = scanner.nextLine();
+                System.out.println("Enter gymID: ");
+                int enteredGymId = Integer.parseInt(scanner.nextLine());
 
-                System.out.println("Enter Updated Gym Name: ");
-                String updatedGym = scanner.nextLine();
+                System.out.println("Enter Date (YYYY-MM-DD): ");
+                String enteredDate = scanner.nextLine();
 
-                System.out.println("Gym updated Successfully");
+                System.out.println("Enter start time (HH:MM:SS) in 24-hour format: ");
+                String startTime = scanner.nextLine();
+
+                System.out.println("Enter end time (HH:MM:SS) in 24-hour format: ");
+                String endTime = scanner.nextLine();
+
+                System.out.println("Enter the number of seats available: ");
+                int seatsAvailable = Integer.parseInt(scanner.nextLine());
+
+                System.out.println("Enter the price: ");
+                double price = Double.parseDouble(scanner.nextLine());
+
+                if(flipFitGymOwnerService.createSlot(enteredGymId, enteredDate, startTime, endTime, seatsAvailable, price) == true){
+                    System.out.println("Slot Added Successfully");
+                }
+                else{
+                    System.out.println("Slot addition failed");
+                }
                 break;
+//            case 5:
+//                System.out.println("Enter Gym Id: ");
+//                gymId = scanner.nextLine();
+//
+//                System.out.println("Enter slotId: ");
+//                String slotId = scanner.nextLine();
+//
+//                System.out.println("Slot updated Successfully");
+//                break;
+//            case 6:
+//                System.out.println("Enter slotId: ");
+//                slotId = scanner.nextLine();
+//
+//                System.out.println("Slot deleted Successfully");
+//                break;
             case 3:
-                System.out.println("Enter Gym Id: ");
-                gymId = scanner.nextLine();
-
-                System.out.println("Gym deleted Successfully");
-                break;
-            case 4:
-                System.out.println("Enter Gym Owner Id: ");
-                int gymOwnerId = Integer.parseInt(scanner.nextLine());
-                List<FlipFitGym> gyms = flipFitGymOwnerService.getGymByGymOwnerId(gymOwnerId);
+                List<FlipFitGym> gyms = flipFitGymOwnerService.getGymByGymOwnerId(flipFitGymOwner.getGymOwnerId());
                 showGyms(gyms);
                 break;
+            case 4:
+                System.out.println("Enter Gym ID: ");
+                int viewSlotGymId = Integer.parseInt(scanner.nextLine());
+                List<FlipFitSlot> slots = flipFitGymOwnerService.getSlotsByGymId(viewSlotGymId);
+                Helper.showSlots(slots, "Slots in gym with gymID " + viewSlotGymId);
+                break;
             case 5:
-                System.out.println("Enter gymID: ");
-                gymId = scanner.nextLine();
-
-                System.out.println("Enter new slot: ");
-                String slot = scanner.nextLine();
-
-                System.out.println("Slot Added Successfully");
-                break;
-            case 6:
-                System.out.println("Enter Gym Id: ");
-                gymId = scanner.nextLine();
-
-                System.out.println("Enter slotId: ");
-                String slotId = scanner.nextLine();
-
-                System.out.println("Enter updated slot: ");
-                slot = scanner.nextLine();
-
-                System.out.println("Slot updated Successfully");
-                break;
-            case 7:
-                System.out.println("Enter slotId: ");
-                slotId = scanner.nextLine();
-
-                System.out.println("Slot deleted Successfully");
-                break;
-            case 8:
                 System.out.println("Logout Successfully");
                 return true;
         }

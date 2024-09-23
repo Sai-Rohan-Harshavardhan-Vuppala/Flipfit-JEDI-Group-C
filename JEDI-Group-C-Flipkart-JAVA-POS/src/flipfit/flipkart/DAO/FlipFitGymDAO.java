@@ -1,6 +1,7 @@
 package flipfit.flipkart.DAO;
 
 import flipfit.flipkart.bean.FlipFitGym;
+import flipfit.flipkart.bean.FlipFitSlot;
 import flipfit.flipkart.utils.Util;
 
 import java.sql.Connection;
@@ -63,14 +64,13 @@ public class FlipFitGymDAO {
         return null;
     }
 
-    public List<FlipFitGym> getAll(String gymCity) {
+    public List<FlipFitGym> getAll() {
         List<FlipFitGym> gyms = new ArrayList<>();
         try{
             Connection con = Util.connectToDatabase();
-            String queryStr = "SELECT * FROM FlipFitGyms WHERE status = ? AND gymCity = ?";
+            String queryStr = "SELECT * FROM FlipFitGyms WHERE status = ?";
             PreparedStatement stmt = con.prepareStatement(queryStr);
             stmt.setString(1, "approved");
-            stmt.setString(2, gymCity);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 FlipFitGym gym = new FlipFitGym();
@@ -83,7 +83,7 @@ public class FlipFitGymDAO {
             }
             con.close();
             if(gyms.isEmpty()){
-                System.out.println("No Gyms found in City: " +  gymCity);
+                System.out.println("No Gyms found.");
             }
         }
         catch(Exception e){
@@ -148,32 +148,6 @@ public class FlipFitGymDAO {
         return false;
     }
 
-    public List<FlipFitGym> getPendingGyms(){
-        List<FlipFitGym> gyms = new ArrayList<>();
-        try{
-            Connection con = Util.connectToDatabase();
-            String queryStr = "SELECT * FROM FlipFitGyms WHERE status = ?";
-            PreparedStatement stmt = con.prepareStatement(queryStr);
-            stmt.setString(1, "pending");
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                FlipFitGym gym = new FlipFitGym();
-                gym.setGymId(rs.getInt("gymId"));
-                gym.setGymName(rs.getString("gymName"));
-                gym.setGymCity(rs.getString("gymCity"));
-                gym.setGymOwnerId(rs.getInt("gymOwnerId"));
-                gym.setStatus(rs.getString("status"));
-                gym.setGymArea(rs.getString("gymArea"));
-                gyms.add(gym);
-            }
-            con.close();
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
-        return gyms;
-    }
-
     public boolean delete(int gymId) {
         try{
             Connection con = Util.connectToDatabase();
@@ -196,4 +170,71 @@ public class FlipFitGymDAO {
         }
         return false;
     }
+
+    public List<FlipFitGym> getByStatus(String status) {
+        List<FlipFitGym> gyms = new ArrayList<>();
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT * FROM FlipFitGyms WHERE status = ?";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                FlipFitGym gym = new FlipFitGym();
+                gym.setGymId(rs.getInt("gymId"));
+                gym.setGymName(rs.getString("gymName"));
+                gym.setGymCity(rs.getString("gymCity"));
+                gym.setGymOwnerId(rs.getInt("gymOwnerId"));
+                gym.setStatus(rs.getString("status"));
+                gym.setGymArea(rs.getString("gymArea"));
+                gyms.add(gym);
+            }
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return gyms;
+    }
+
+    public List<String> getAreasByCityAndStatus(String city, String status) {
+        List<String> areas = new ArrayList<>();
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT DISTINCT gymArea FROM FlipFitGyms WHERE city = ? AND status = ? ORDER BY gymArea ASC";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setString(1, city);
+            stmt.setString(2, status);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                areas.add(rs.getString("gymArea"));
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return areas;
+    }
+
+
+
+    public List<String> getCitiesByStatus(String status) {
+        List<String> cities = new ArrayList<>();
+        try{
+            Connection con = Util.connectToDatabase();
+            String queryStr = "SELECT gymCity FROM FlipFitGyms WHERE status = ?";
+            PreparedStatement stmt = con.prepareStatement(queryStr);
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                cities.add(rs.getString("gymCity"));
+            }
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return cities;
+    }
+
 }

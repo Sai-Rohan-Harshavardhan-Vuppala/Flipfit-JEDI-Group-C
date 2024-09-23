@@ -58,26 +58,26 @@ CREATE TABLE FlipFitSlots (
     startTime TIME NOT NULL,
     endTime TIME NOT NULL,
     seatsAvailable INT NOT NULL,
+    totalSeats INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,  
+    slotDate DATE NOT NULL, 
     FOREIGN KEY (gymId) REFERENCES FlipFitGyms(gymId) ON DELETE CASCADE 
 );
 
 create table FlipFitPayments (
 	paymentId int primary key auto_increment,
-    transactionId varchar(20) not null,
+    transactionId varchar(20) UNIQUE not null,
 	customerId int not null,
-	paymentStatus varchar(255) not null,
 	foreign key (customerId) references FlipFitCustomers(customerId)
 );
 
 CREATE TABLE FlipFitBookings(
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    bookingId INT PRIMARY KEY AUTO_INCREMENT,
     customerId INT,
     slotId INT,
     paymentId INT,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(20) NOT NULL,
-    waitlistRank INT,
     FOREIGN KEY (customerId) REFERENCES FlipFitCustomers(customerId) ON DELETE CASCADE,
     FOREIGN KEY (slotId) REFERENCES FlipFitSlots(slotId) ON DELETE CASCADE,
     FOREIGN KEY (paymentId) REFERENCES FlipFitPayments(paymentId) ON DELETE CASCADE
@@ -101,6 +101,17 @@ INSERT INTO FlipFitUsers (username, password, email, name, roleId, status) VALUE
 INSERT INTO FlipFitCustomers (userId, phone) VALUES (2, "7075014903");
 INSERT INTO FlipFitUsers (username, password, email, name, roleId, status) VALUES ("sankalp", "sankalp@123", "sankalpg38@gmail.com", "Sankalp Garg", 3, "whitelisted");
 INSERT INTO FlipFitGymOwners (userId, accountNumber) VALUES (3, "IDBI012345600K023");
--- INSERT INTO FlipFitGyms (username, password, email, name, roleId, status) VALUES ("harshavardhan", "harsh@123", "harsha@gmail.com", "Harshavardhan", 1, "whitelisted");
-INSERT INTO FlipFitGyms (gymId, gymOwnerId, gymName, gymCity, gymArea, status) VALUES (121, 1, "MyGym", "Bangalore", "Bellandur", "approved");
-INSERT INTO FlipFitGyms (gymId, gymOwnerId, gymName, gymCity, gymArea, status) VALUES (134, 1, "MyGym", "Bangalore", "Bellandur", "pending");
+INSERT INTO FlipFitUsers (username, password, email, name, roleId, status) VALUES ("sai", "pass", "sai@gmail.com", "Sai", 2, "whitelisted");
+INSERT INTO FlipFitCustomers (userId, phone) VALUES (4, "8522938243");
+
+INSERT INTO FlipFitGyms (gymName, gymOwnerId, gymCity, gymArea, status) VALUES ("Sankalp Gym 1", 1, "Bangalore", "Bellandur", "approved");
+INSERT INTO FlipFitGyms (gymName, gymOwnerId, gymCity, gymArea, status) VALUES ("Sankalp Gym 2", 1, "Bangalore", "HSR Layout", "approved");
+INSERT INTO FlipFitSlots (gymId, slotDate, startTime, endTime, seatsAvailable, totalSeats, price, status) VALUES (1, "2024-09-24", "14:30:00", "16:29:00", 30, 30, 100, "approved");
+INSERT INTO FlipFitSlots (gymId, slotDate, startTime, endTime, seatsAvailable, totalSeats, price, status) VALUES (1, "2024-09-24", "12:30:00", "14:29:00", 30, 30, 100, "approved");
+INSERT INTO FlipFitSlots (gymId, slotDate, startTime, endTime, seatsAvailable, totalSeats, price, status) VALUES (2, "2024-09-24", "14:30:00", "16:29:00", 30, 30, 100, "approved");
+INSERT INTO FlipFitSlots (gymId, slotDate, startTime, endTime, seatsAvailable, totalSeats, price, status) VALUES (2, "2024-09-24", "16:30:00", "18:29:00", 1, 1, 100, "approved");
+INSERT INTO FlipFitPayments (transactionId, customerId) VALUES ("T07123456", 1);
+INSERT INTO FlipFitBookings (customerId, slotId, paymentId, status) VALUES (1, 4, 1, "confirmed");
+UPDATE FlipFitSlots SET seatsAvailable = seatsAvailable - 1 WHERE slotId = 4;
+INSERT INTO FlipFitPayments (transactionId, customerId) VALUES ("T07123458", 2);
+INSERT INTO FlipFitBookings (customerId, slotId, paymentId, status) VALUES (2, 4, 2, "waitlisted");

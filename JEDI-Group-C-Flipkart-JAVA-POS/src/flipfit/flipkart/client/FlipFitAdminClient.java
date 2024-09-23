@@ -6,6 +6,7 @@ import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
+import flipfit.flipkart.helper.Helper;
 
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class FlipFitAdminClient {
         System.out.printf("---------------------------------------------------------------------------------------------------------------------------------%n");
     }
 
-    private void showPendingGyms(List<FlipFitGym> pendingGyms) {
+    public void showPendingGyms(List<FlipFitGym> pendingGyms) {
         System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
         System.out.printf("Pending Gyms%n");
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
@@ -70,7 +71,7 @@ public class FlipFitAdminClient {
         System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s | %-20s |%n", "Customer ID", "Slot ID", "Booking Status", "Payment ID", "Booking Date", "Waitlist Rank");
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
         for(FlipFitBooking booking: allBookings){
-            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s | %-20s |%n", booking.getCustomerId(), booking.getSlotId(), booking.getBookingStatus(), booking.getPaymentId(), booking.getBookingDate(), booking.getWaitListRank());
+            System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s | %-20s |%n", booking.getCustomerId(), booking.getSlotId(), booking.getBookingStatus(), booking.getPaymentId(), booking.getcreatedAt().toString());
         }
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
     }
@@ -118,6 +119,8 @@ public class FlipFitAdminClient {
                 break;
             case 5:
                 System.out.println("Pending slot requests displayed");
+                List<FlipFitSlot> pendingSlots = flipFitGymOwnerService.getPendingSlots();
+                Helper.showSlots(pendingSlots, "Pending slots");
                 break;
             case 6:
                 System.out.println("Enter gymId: ");
@@ -131,45 +134,42 @@ public class FlipFitAdminClient {
                 break;
             case 8:
                 System.out.println("Enter slotId: ");
-                int slotId = Integer.parseInt(sc.nextLine());
-                System.out.println("Approve slot\n1. Yes\n2. No");
-                int slotApprovalChoice = Integer.parseInt(sc.nextLine());
-                switch(slotApprovalChoice){
-                    case 1:
-                        System.out.println("Request for GymId " + slotId + " approved");
-                        break;
-                    case 2:
-                        System.out.println("Request for Slot " + slotId + " rejected");
-                }
-                validateSlot();
+                int approvedSlotId = Integer.parseInt(sc.nextLine());
+                flipFitAdminService.approveSlot(approvedSlotId);
+
+                break;
+            case 9:
+                System.out.println("Enter slotId: ");
+                int rejectedSlotId = Integer.parseInt(sc.nextLine());
+                flipFitAdminService.rejectSlot(rejectedSlotId);
                 break;
             case 10:
                 FlipFitCustomerService customerService = new FlipFitCustomerService();
                 List<FlipFitCustomer> customers = customerService.getAllCustomers();
-                System.out.printf("%n---------------------------------------------------------------%n");
+                System.out.printf("%n-------------------------------------------------------------------------------------%n");
                 System.out.printf("Registered Customers%n");
-                System.out.printf("---------------------------------------------------------------%n");
-                System.out.printf("| %-10s | %-15s | %-30s | %-15s |%n", "CUSTOMER ID", "USERNAME", "EMAIL-ID", "PHONE");
-                System.out.printf("---------------------------------------------------------------%n");
+                System.out.printf("-------------------------------------------------------------------------------------%n");
+                System.out.printf("| %-12s | %-15s | %-30s | %-15s |%n", "CUSTOMER ID", "USERNAME", "EMAIL-ID", "PHONE");
+                System.out.printf("-------------------------------------------------------------------------------------%n");
                 for (FlipFitCustomer customer : customers) {
-                    System.out.printf("| %-10s | %-15s | %-30s | %-15s |%n", customer.getCustomerId(), customer.getUsername(), customer.getEmail(), customer.getPhone());
+                    System.out.printf("| %-12s | %-15s | %-30s | %-15s |%n", customer.getCustomerId(), customer.getUsername(), customer.getEmail(), customer.getPhone());
                 }
-                System.out.printf("---------------------------------------------------------------%n");
+                System.out.printf("-------------------------------------------------------------------------------------%n");
 
                 break;
             case 11:
                 FlipFitGymOwnerService gymOwnerService = new FlipFitGymOwnerService();
                 List<FlipFitGymOwner> gymOwners = gymOwnerService.getAllGymOwners();
 
-                System.out.printf("%n---------------------------------------------------------------%n");
+                System.out.printf("%n---------------------------------------------------------------------------------------------%n");
                 System.out.printf("Gym Owners%n");
-                System.out.printf("---------------------------------------------------------------%n");
+                System.out.printf("---------------------------------------------------------------------------------------------%n");
                 System.out.printf("| %-15s | %-15s | %-30s | %-20s |%n", "GYM OWNER ID", "USERNAME", "EMAIL-ID", "ACCOUNT NUMBER");
-                System.out.printf("---------------------------------------------------------------%n");
+                System.out.printf("---------------------------------------------------------------------------------------------%n");
                 for (FlipFitGymOwner gymOwner : gymOwners) {
                     System.out.printf("| %-15s | %-15s | %-30s | %-20s |%n", gymOwner.getGymOwnerId(), gymOwner.getUsername(), gymOwner.getEmail(), gymOwner.getAccountNumber());
                 }
-                System.out.printf("---------------------------------------------------------------%n");
+                System.out.printf("---------------------------------------------------------------------------------------------%n");
 
                 break;
             case 12:

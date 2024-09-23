@@ -71,4 +71,6 @@ public class FlipFitGym {
     public void setGymArea(String gymArea) {
         this.gymArea = gymArea;
     }
+
+
 }

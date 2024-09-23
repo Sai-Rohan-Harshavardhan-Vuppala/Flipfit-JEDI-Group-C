@@ -5,9 +5,9 @@ public class FlipFitPayment {
     private int paymentId;
     static int paymentCounter = 0;
 
-    public FlipFitPayment(String transactionId) {
+    public FlipFitPayment(String transactionId, int paymentId) {
         this.transactionId = transactionId;
-        this.paymentId = paymentCounter++;
+        this.paymentId = paymentId;
     }
 
     public int getPaymentId(){
