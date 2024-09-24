@@ -159,7 +159,7 @@ public class FlipFitBookingDAO {
         }
         return booking;
     }
-    public static List<FlipFitBooking> getAllBookings() {
+    public List<FlipFitBooking> getAllBookings() {
         List<FlipFitBooking> bookings = new ArrayList<>();
         try{
             Connection con = Util.connectToDatabase();
@@ -188,7 +188,7 @@ public class FlipFitBookingDAO {
         return bookings;
     }
 
-    public static List<FlipFitBooking> getByCustomerId(int customerId) {
+    public List<FlipFitBooking> getByCustomerId(int customerId) {
         List<FlipFitBooking> bookings = new ArrayList<>();
         try{
             Connection con = Util.connectToDatabase();

@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class FlipFitAdminDAO {
+public class FlipFitAdminDAOImpl implements FlipFitAdminDAOInterface{
     public FlipFitAdmin getByUser(FlipFitUser user){
         try{
             int userId = user.getUserId();

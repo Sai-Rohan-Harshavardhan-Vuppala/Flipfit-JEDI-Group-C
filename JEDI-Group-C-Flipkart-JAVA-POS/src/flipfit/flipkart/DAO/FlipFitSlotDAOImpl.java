@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlipFitSlotDAO {
+public class FlipFitSlotDAOImpl implements FlipFitSlotDAOInterface {
     public boolean create(int gymId, String slotDate, String startTime, String endTime, int seatsAvailable, double price, int totalSeats, String status) {
         try{
             Connection con = Util.connectToDatabase();

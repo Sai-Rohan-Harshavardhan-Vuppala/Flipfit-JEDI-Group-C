@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class FlipFitPaymentDAO {
+public class FlipFitPaymentDAOImpl implements FlipFitPaymentDAOInterface {
     public boolean create(String transactionId, int customerId) {
         try{
             Connection con = Util.connectToDatabase();
