@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 
-public class FlipFitSlot {
+public class FlipFitSlot extends FlipFitGym{
     private int slotId;
     private String status;
     private int gymId;

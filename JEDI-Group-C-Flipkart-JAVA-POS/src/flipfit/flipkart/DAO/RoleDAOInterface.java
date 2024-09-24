@@ -1,4 +1,5 @@
 package flipfit.flipkart.DAO;
 
-public class RoleDAOInterface {
+public interface RoleDAOInterface {
+    public void createRole(String roleName);
 }

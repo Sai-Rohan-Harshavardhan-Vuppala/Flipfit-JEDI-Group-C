@@ -1,4 +1,9 @@
 package flipfit.flipkart.DAO;
 
-public class FlipFitCustomerDAOInterface {
+import flipfit.flipkart.bean.FlipFitCustomer;
+import flipfit.flipkart.bean.FlipFitUser;
+
+public interface FlipFitCustomerDAOInterface {
+    public void create(int userId, String phone);
+    public FlipFitCustomer getByUser(FlipFitUser user);
 }

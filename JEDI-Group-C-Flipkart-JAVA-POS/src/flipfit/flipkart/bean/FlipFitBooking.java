@@ -4,13 +4,9 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class FlipFitBooking {
+public class FlipFitBooking extends FlipFitSlot{
     private int bookingId;
     private int customerId;
-    private int slotId;
-    private Date slotDate;
-    private Time startTime;
-    private Time endTime;
     private String bookingStatus;
     private int paymentId;
     private Timestamp createdAt;
@@ -24,33 +20,10 @@ public class FlipFitBooking {
         this.createdAt = createdAt;
     }
 
-    public Date getSlotDate() {
-        return slotDate;
-    }
-
-    public void setSlotDate(Date slotDate) {
-        this.slotDate = slotDate;
-    }
-
     public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
     }
 
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
 
 
 
@@ -81,14 +54,6 @@ public class FlipFitBooking {
     }
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
-    }
-
-    public int getSlotId() {
-        return slotId;
-    }
-
-    public void setSlotId(int slotId) {
-        this.slotId = slotId;
     }
 
     public String getBookingStatus() {

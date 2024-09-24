@@ -1,10 +1,7 @@
 package flipfit.flipkart.DAO;
 
-import flipfit.flipkart.bean.FlipFitCustomer;
-import flipfit.flipkart.bean.FlipFitGym;
 import flipfit.flipkart.bean.FlipFitGymOwner;
 import flipfit.flipkart.bean.FlipFitUser;
-import flipfit.flipkart.helper.Helper;
 import flipfit.flipkart.utils.Util;
 
 import java.sql.Connection;
@@ -13,7 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlipFitGymOwnerDAO {
+public class FlipFitGymOwnerDAOImpl implements FlipFitGymOwnerDAOInterface {
     public void create(int userId, String accountNumber){
         try{
             Connection con = Util.connectToDatabase();

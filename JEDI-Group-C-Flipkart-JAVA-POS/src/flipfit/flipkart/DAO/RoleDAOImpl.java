@@ -4,7 +4,7 @@ import flipfit.flipkart.utils.Util;
 
 import java.sql.*;
 
-public class RoleDAO {
+public class RoleDAOImpl implements RoleDAOInterface{
     public void createRole(String roleName){
         try{
             Connection con = Util.connectToDatabase();

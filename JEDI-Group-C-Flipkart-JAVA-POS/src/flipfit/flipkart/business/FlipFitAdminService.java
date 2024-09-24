@@ -2,94 +2,102 @@ package flipfit.flipkart.business;
 
 import flipfit.flipkart.DAO.*;
 import flipfit.flipkart.bean.*;
+import flipfit.flipkart.exceptions.*;
 import flipfit.flipkart.helper.Helper;
 
-import java.util.ArrayList;
-import java.util.List;
+import static flipfit.flipkart.helper.Helper.printInGreen;
+import static flipfit.flipkart.helper.Helper.printInRed;
 
 public class FlipFitAdminService {
-    private FlipFitAdminDAO flipFitAdminDAO;
+    private FlipFitAdminDAOImpl flipFitAdminDAO;
     public FlipFitAdminService() {
-        flipFitAdminDAO = new FlipFitAdminDAO();
+        flipFitAdminDAO = new FlipFitAdminDAOImpl();
     }
 
-    public FlipFitAdmin login(String email, String password) {
+    public FlipFitAdmin login(String email, String password) throws IncorrectCredentialsException, IncorrectRoleSelectedException {
+        FlipFitAdmin flipFitAdmin = null;
         FlipFitUser user = Helper.verifyCredentials(email, password);
-        return user != null ? flipFitAdminDAO.getByUser(user) : null;
+        if(user == null){
+            throw new IncorrectCredentialsException();
+        }
+        flipFitAdmin = flipFitAdminDAO.getByUser(user);
+        if(user.getRoleId() != 1){
+            throw new IncorrectRoleSelectedException();
+        }
+        return flipFitAdmin;
     }
 
-    public void approveGymOwner(int userId) {
-        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
+    public void approveGymOwner(int userId) throws UserNotFoundException {
+        FlipFitUserDAOInterface flipFitUserDAO = new FlipFitUserDAOImpl();
         FlipFitUser flipFitUser = flipFitUserDAO.getByUserId(userId);
 //        flipFitUser.printAllDetails();
         if(flipFitUser == null) {
-            System.out.println("User " + userId + " doesn't exist");
-            return;
+            throw new UserNotFoundException(userId);
         }
         flipFitUserDAO.update(flipFitUser.getUsername(), flipFitUser.getPassword(), flipFitUser.getEmail(), flipFitUser.getName(), "whitelisted", flipFitUser.getRoleId(), flipFitUser.getUserId());
-        System.out.println("Gym Owner request with User ID " + userId + " was approved");
+        printInGreen("Gym Owner request with User ID " + userId + " was approved");
+
+
     }
 
-    public void rejectGymOwner(int userId){
-        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
-        flipFitUserDAO.delete(userId);
-        FlipFitGymOwnerDAO flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
-        flipFitGymOwnerDAO.deleteByUserId(userId);
-        System.out.println("Gym Owner request with User ID " + userId + " was rejected");
+    public void rejectGymOwner(int userId) throws UserNotFoundException {
+        FlipFitUserDAOInterface flipFitUserDAO = new FlipFitUserDAOImpl();
+        if(flipFitUserDAO.delete(userId) == false) {
+            throw new UserNotFoundException(userId);
+        }
+        FlipFitGymOwnerDAOImpl flipFitGymOwnerDAOImpl = new FlipFitGymOwnerDAOImpl();
+        flipFitGymOwnerDAOImpl.deleteByUserId(userId);
+        printInGreen("Gym Owner request with User ID " + userId + " was rejected");
     }
 
-    public void approveGym(int gymId) {
-        FlipFitGymDAO flipFitGymDAO = new FlipFitGymDAO();
-        FlipFitGym gym = flipFitGymDAO.get(gymId);
-        if(flipFitGymDAO.update(gym.getGymName(), gym.getGymCity(), gym.getGymArea(),"approved", gym.getGymOwnerId(), gym.getGymId())){
-            System.out.println("Gym approved with Gym ID " + gymId + " was approved");
+    public void approveGym(int gymId) throws GymNotFoundException {
+        FlipFitGymDAOImpl flipFitGymDAOImpl = new FlipFitGymDAOImpl();
+        FlipFitGym gym = flipFitGymDAOImpl.get(gymId);
+        if(flipFitGymDAOImpl.update(gym.getGymName(), gym.getGymCity(), gym.getGymArea(),"approved", gym.getGymOwnerId(), gym.getGymId())){
+            printInGreen("Gym approved with Gym ID " + gymId + " was approved");
         }
         else{
-            System.out.println("Failed to approve gym with Gym ID " + gymId + " was approved");
-
+            throw new GymNotFoundException(gymId);
         }
+
     }
 
-    public void rejectGym(int gymId) {
-        FlipFitGymDAO flipFitGymDAO = new FlipFitGymDAO();
-        if(flipFitGymDAO.delete(gymId)){
-            System.out.println("Gym with Gym ID" + gymId + " was rejected");
+    public void rejectGym(int gymId) throws GymNotFoundException {
+        FlipFitGymDAOImpl flipFitGymDAOImpl = new FlipFitGymDAOImpl();
+        if(flipFitGymDAOImpl.delete(gymId)){
+            printInGreen("Gym with Gym ID" + gymId + " was rejected");
         }
         else{
-            System.out.println("Gym with Gym ID" + gymId + " does not exist");
+            throw new GymNotFoundException(gymId);
         }
+
     }
 
-    public void approveSlot(int slotId) {
-        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+    public void approveSlot(int slotId) throws SlotAlreadyApprovedException, SlotNotFoundException {
+        FlipFitSlotDAOInterface flipFitSlotDAO = new FlipFitSlotDAOImpl();
         FlipFitSlot flipFitSlot = flipFitSlotDAO.get(slotId);
         if(flipFitSlot == null){
-            System.out.println("Slot " + slotId + " doesn't exist");
+            throw new SlotNotFoundException(slotId);
         }
         else{
             if(flipFitSlot.getStatus() == "approved"){
-                System.out.println("Slot " + slotId + " is already approved");
+                throw new SlotAlreadyApprovedException(slotId);
             }
             else{
                 boolean result = flipFitSlotDAO.update(flipFitSlot.getSlotId(), flipFitSlot.getGymId(), flipFitSlot.getSlotDate().toString(), flipFitSlot.getStartTime().toString(), flipFitSlot.getEndTime().toString(), flipFitSlot.getSeatsAvailable(), flipFitSlot.getPrice(), "approved", flipFitSlot.getTotalSeats());
-                if(result){
-                    System.out.println("Slot " + slotId + " was approved");
-                }
-                else{
-                    System.out.println("Incorrect details entered. Slot " + slotId + " approval failed.");
-                }
+                printInGreen("Slot " + slotId + " was approved");
             }
         }
     }
 
 
-    public void rejectSlot(int rejectedSlotId) {
-        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+    public void rejectSlot(int rejectedSlotId) throws SlotNotFoundException{
+        FlipFitSlotDAOInterface flipFitSlotDAO = new FlipFitSlotDAOImpl();
         if(flipFitSlotDAO.delete(rejectedSlotId)){
-            System.out.println("Slot " + rejectedSlotId + " was rejected");
+            printInGreen("Slot " + rejectedSlotId + " was rejected");
         }
         else{
-            System.out.println("Slot Id does not exist.");
+            throw new SlotNotFoundException(rejectedSlotId);
         }
     }
 
@@ -100,7 +108,7 @@ public class FlipFitAdminService {
     public FlipFitNotification createNotification(String message, String email){
         // creating dummy notification --> needs to be changed
         FlipFitNotification notification = new FlipFitNotification(message, email);
-        System.out.println("Notification with message " + message + "to email: " + email);
+        printInGreen("Notification with message " + message + "to email: " + email);
         return notification;
 
     }
@@ -108,12 +116,12 @@ public class FlipFitAdminService {
     public FlipFitNotification getNotificationById(int notificationId){
         // creating dummy notification --> needs to be changed
         FlipFitNotification notification = this.createNotification("slot booked", "shv12@iitbbs.ac.in");
-        System.out.println("Notification with id " + notificationId);
+        printInGreen("Notification with id " + notificationId);
         return notification;
     }
 
     public boolean deleteNotification(int notificationId){
-        System.out.println("Deleting notification with id " + notificationId);
+        printInGreen("Deleting notification with id " + notificationId);
         return true;
     }
 

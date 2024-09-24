@@ -1,11 +1,9 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.DAO.FlipFitBookingDAO;
-import flipfit.flipkart.DAO.FlipFitGymDAO;
-import flipfit.flipkart.DAO.FlipFitGymOwnerDAO;
-import flipfit.flipkart.DAO.FlipFitSlotDAO;
-import flipfit.flipkart.DAO.FlipFitUserDAO;
+import flipfit.flipkart.DAO.*;
+import flipfit.flipkart.DAO.FlipFitSlotDAOInterface;
 import flipfit.flipkart.bean.*;
+import flipfit.flipkart.exceptions.*;
 import flipfit.flipkart.helper.Helper;
 
 import java.sql.Time;
@@ -14,58 +12,58 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static flipfit.flipkart.helper.Helper.printInGreen;
+
 
 public class FlipFitGymOwnerService {
-    private FlipFitGymOwnerDAO flipFitGymOwnerDAO;
-    private FlipFitGymDAO flipFitGymDAO;
-    private FlipFitSlotDAO flipFitSlotDAO;
+    private FlipFitGymOwnerDAOImpl flipFitGymOwnerDAOImpl;
+    private FlipFitGymDAOImpl flipFitGymDAOImpl;
+    private FlipFitSlotDAOInterface flipFitSlotDAO;
 
     public FlipFitGymOwnerService() {
-        flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
-        flipFitGymDAO = new FlipFitGymDAO();
-        flipFitSlotDAO = new FlipFitSlotDAO();
+        flipFitGymOwnerDAOImpl = new FlipFitGymOwnerDAOImpl();
+        flipFitGymDAOImpl = new FlipFitGymDAOImpl();
+        flipFitSlotDAO = new FlipFitSlotDAOImpl();
     }
 
-    public FlipFitGymOwner login(String email, String password){
+    public FlipFitGymOwner login(String email, String password) throws IncorrectCredentialsException {
         FlipFitUser user = Helper.verifyCredentials(email, password);
-        return user != null ? flipFitGymOwnerDAO.getByUser(user) : null;
+        if(user == null) {
+            throw new IncorrectCredentialsException();
+        }
+        return flipFitGymOwnerDAOImpl.getByUser(user);
     }
 
     public List<FlipFitGymOwner> getPendingGymOwners() {
-        return flipFitGymOwnerDAO.getByStatus("pending");
+        return flipFitGymOwnerDAOImpl.getByStatus("pending");
     }
 
-    public FlipFitGymOwner createGymOwner(String username, String password, String email, String name, String accountNumber){
-        if(Helper.checkIfUserWithEmailExists(email)){
-            System.out.println("User with email already exists");
-            return null;
-        }
-        System.out.println("Creating gym owner");
+    public FlipFitGymOwner createGymOwner(String username, String password, String email, String name, String accountNumber) throws EmailAlreadyExistsException {
+        Helper.checkIfUserWithEmailExists(email);
+        printInGreen("Creating gym owner");
         /*
         validate other details
          */
 
-        FlipFitUserDAO flipFitUserDAO = new FlipFitUserDAO();
+        FlipFitUserDAOInterface flipFitUserDAO = new FlipFitUserDAOImpl();
         flipFitUserDAO.create(username, password, email, name, 3, "pending");
         FlipFitUser flipFitUser = flipFitUserDAO.getByEmail(email);
         int userId = flipFitUser.getUserId();
-        flipFitGymOwnerDAO.create(userId, accountNumber);
-        FlipFitGymOwner flipFitGymOwner = flipFitGymOwnerDAO.getByUser(flipFitUser);
-        System.out.println("Your registration request is pending at admin");
+        flipFitGymOwnerDAOImpl.create(userId, accountNumber);
+        FlipFitGymOwner flipFitGymOwner = flipFitGymOwnerDAOImpl.getByUser(flipFitUser);
+        printInGreen("Your registration request is pending at admin");
         return flipFitGymOwner;
     }
 
-    public boolean createGym(String gymName, String gymCity, String gymArea, int gymOwnerId){
-        FlipFitGymOwner gymOwner = flipFitGymOwnerDAO.get(gymOwnerId);
+    public boolean createGym(String gymName, String gymCity, String gymArea, int gymOwnerId) throws GymOwnerNotFoundException, RegistrationPendingAtAdmin {
+        FlipFitGymOwner gymOwner = flipFitGymOwnerDAOImpl.get(gymOwnerId);
         if(gymOwner == null){
-            System.out.println("Gym owner with gym owner ID " + gymOwnerId + " does not exist");
-            return false;
+            throw new GymOwnerNotFoundException(gymOwnerId);
         }
         else if(gymOwner.getStatus() == "pending"){
-            System.out.println("Gym owner registration pending at admin");
-            return false;
+            throw new RegistrationPendingAtAdmin("gymOwner");
         }
-        flipFitGymDAO.create(gymName, gymCity, gymArea, gymOwnerId);
+        flipFitGymDAOImpl.create(gymName, gymCity, gymArea, gymOwnerId);
         return true;
     }
 
@@ -78,15 +76,15 @@ public class FlipFitGymOwnerService {
     }
 
     public List<FlipFitGym> getGymByGymOwnerId(int gymOwnerId){
-        return flipFitGymDAO.getGymByGymOwnerId(gymOwnerId);
+        return flipFitGymDAOImpl.getGymByGymOwnerId(gymOwnerId);
     }
     /*
      * Slot services begin from here ----------------------->
      */
 
-    public boolean createSlot(int gymId, String date, String startTime, String endTime, int seatsAvailable, double price) {
+    public boolean createSlot(int gymId, String date, String startTime, String endTime, int seatsAvailable, double price) throws SlotIntersectException {
 
-        FlipFitGym flipFitGym = flipFitGymDAO.get(gymId);
+        FlipFitGym flipFitGym = flipFitGymDAOImpl.get(gymId);
         if(flipFitGym == null){
             System.out.println("Gym not found");
             return false;
@@ -95,8 +93,7 @@ public class FlipFitGymOwnerService {
         List<FlipFitSlot> slots = flipFitSlotDAO.getByGymIdAndStatusAndDate(gymId, "approved", date);
         for(FlipFitSlot slot : slots){
             if(Helper.checkIfSlotsIntersect(slot.getStartTime(), slot.getEndTime(), Time.valueOf(startTime), Time.valueOf(endTime))){
-                System.out.println("Slot cannot be added as it intersects with other slots in the same gym.");
-                return false;
+                throw new SlotIntersectException();
             }
         }
         if(flipFitSlotDAO.create(gymId, date, startTime, endTime, seatsAvailable, price, seatsAvailable, "pending")){
@@ -111,13 +108,13 @@ public class FlipFitGymOwnerService {
 
 
     public void updateSlot(int slotId, int gymId, String date, String startTime, String endTime, int seatsAvailable, double price, int totalSeats, String status) {
-        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+        FlipFitSlotDAOInterface flipFitSlotDAO = new FlipFitSlotDAOImpl();
         flipFitSlotDAO.update(slotId, gymId, date, startTime, endTime, seatsAvailable, price, status, totalSeats);
-        System.out.println("Updated slot");
+        printInGreen("Updated slot");
     }
 
     public boolean deleteSlot(int SlotId) {
-        System.out.println("Delete slot with " + SlotId);
+
         return true;
     }
 
@@ -140,17 +137,18 @@ public class FlipFitGymOwnerService {
     }
 
     public List<FlipFitGym> getPendingGyms() {
-        return flipFitGymDAO.getByStatus("pending");
+        return flipFitGymDAOImpl.getByStatus("pending");
     }
 
     public List<FlipFitGym> getApprovedGyms() {
-        return flipFitGymDAO.getByStatus("approved");
+        return flipFitGymDAOImpl.getByStatus("approved");
     }
     public List<FlipFitGym> getAll() {
-        return flipFitGymDAO.getAll();
+        return flipFitGymDAOImpl.getAll();
     }
     public List<FlipFitBooking> getAllBookings() {
-        return FlipFitBookingDAO.getAllBookings();
+        FlipFitBookingDAOImpl flipFitBookingDAOImpl = new FlipFitBookingDAOImpl();
+        return flipFitBookingDAOImpl.getAllBookings();
     }
 
     public List<FlipFitSlot> getPendingSlots() {
@@ -161,18 +159,17 @@ public class FlipFitGymOwnerService {
         return flipFitSlotDAO.getByGymId(gymId);
     }
 
-    public FlipFitGymOwner getGymOwnerBySlotId(int slotId) {
-        FlipFitSlotDAO flipFitSlotDAO = new FlipFitSlotDAO();
+    public FlipFitGymOwner getGymOwnerBySlotId(int slotId) throws SlotNotFoundException{
+        FlipFitSlotDAOInterface flipFitSlotDAO = new FlipFitSlotDAOImpl();
         FlipFitSlot slot = flipFitSlotDAO.get(slotId);
         if(slot == null){
-            System.out.println("Slot with id " + slotId + " does not exist");
-            return null;
+            throw new SlotNotFoundException(slotId);
         }
-        FlipFitGymDAO flipFitGymDAO = new FlipFitGymDAO();
-        FlipFitGym gym = flipFitGymDAO.get(slot.getGymId());
+        FlipFitGymDAOImpl flipFitGymDAOImpl = new FlipFitGymDAOImpl();
+        FlipFitGym gym = flipFitGymDAOImpl.get(slot.getGymId());
 
-        FlipFitGymOwnerDAO flipFitGymOwnerDAO = new FlipFitGymOwnerDAO();
-        return flipFitGymOwnerDAO.get(gym.getGymOwnerId());
+        FlipFitGymOwnerDAOImpl flipFitGymOwnerDAOImpl = new FlipFitGymOwnerDAOImpl();
+        return flipFitGymOwnerDAOImpl.get(gym.getGymOwnerId());
     }
 
 
@@ -181,7 +178,7 @@ public class FlipFitGymOwnerService {
      */
 
     public List<FlipFitGymOwner> getAllGymOwners() {
-        return flipFitGymOwnerDAO.getAllGymOwners();
+        return flipFitGymOwnerDAOImpl.getAllGymOwners();
     }
 
 }

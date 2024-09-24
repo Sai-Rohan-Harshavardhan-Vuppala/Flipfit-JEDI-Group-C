@@ -2,13 +2,12 @@ package flipfit.flipkart.DAO;
 import java.sql.*;
 import flipfit.flipkart.bean.FlipFitCustomer;
 import flipfit.flipkart.bean.FlipFitUser;
-import flipfit.flipkart.constant.Constant;
 import flipfit.flipkart.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlipFitCustomerDAO {
+public class FlipFitCustomerDAOImpl implements FlipFitCustomerDAOInterface {
 
     public void create(int userId, String phone){
         try{

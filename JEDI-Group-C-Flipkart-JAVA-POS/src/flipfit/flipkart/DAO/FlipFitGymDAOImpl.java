@@ -1,7 +1,6 @@
 package flipfit.flipkart.DAO;
 
 import flipfit.flipkart.bean.FlipFitGym;
-import flipfit.flipkart.bean.FlipFitSlot;
 import flipfit.flipkart.utils.Util;
 
 import java.sql.Connection;
@@ -10,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlipFitGymDAO {
+public class FlipFitGymDAOImpl implements FlipFitGymDAOInterface {
     public void create(String gymName, String gymCity, String gymArea, int gymOwnerId) {
         try{
             Connection con = Util.connectToDatabase();
@@ -48,7 +47,7 @@ public class FlipFitGymDAO {
                 gym.setGymName(rs.getString("gymName"));
                 gym.setGymCity(rs.getString("gymCity"));
                 gym.setGymArea(rs.getString("gymArea"));
-                gym.setStatus(rs.getString("status"));
+                gym.setGymStatus(rs.getString("status"));
                 gym.setGymOwnerId(rs.getInt("gymOwnerId"));
                 con.close();
                 return gym;
@@ -77,7 +76,7 @@ public class FlipFitGymDAO {
                 gym.setGymName(rs.getString("gymName"));
                 gym.setGymCity(rs.getString("gymCity"));
                 gym.setGymArea(rs.getString("gymArea"));
-                gym.setStatus(rs.getString("status"));
+                gym.setGymStatus(rs.getString("status"));
                 gym.setGymOwnerId(rs.getInt("gymOwnerId"));
                 gyms.add(gym);
             }
@@ -106,7 +105,7 @@ public class FlipFitGymDAO {
                 gym.setGymName(rs.getString("gymName"));
                 gym.setGymCity(rs.getString("gymCity"));
                 gym.setGymArea(rs.getString("gymArea"));
-                gym.setStatus(rs.getString("status"));
+                gym.setGymStatus(rs.getString("status"));
                 gyms.add(gym);
             }
             con.close();
@@ -185,7 +184,7 @@ public class FlipFitGymDAO {
                 gym.setGymName(rs.getString("gymName"));
                 gym.setGymCity(rs.getString("gymCity"));
                 gym.setGymOwnerId(rs.getInt("gymOwnerId"));
-                gym.setStatus(rs.getString("status"));
+                gym.setGymStatus(rs.getString("status"));
                 gym.setGymArea(rs.getString("gymArea"));
                 gyms.add(gym);
             }

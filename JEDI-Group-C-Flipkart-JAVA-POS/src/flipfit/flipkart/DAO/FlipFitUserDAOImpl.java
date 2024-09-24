@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import flipfit.flipkart.bean.FlipFitUser;
-import flipfit.flipkart.constant.Constant;
 import flipfit.flipkart.utils.Util;
 
-public class FlipFitUserDAO {
+import static flipfit.flipkart.helper.Helper.printInGreen;
+import static flipfit.flipkart.helper.Helper.printInRed;
+
+public class FlipFitUserDAOImpl implements FlipFitUserDAOInterface {
 
 
 
@@ -129,23 +131,26 @@ public class FlipFitUserDAO {
         return null;
     }
 
-    public void delete(int userId){
+    public boolean delete(int userId){
+        boolean result = false;
         try{
             Connection con = Util.connectToDatabase();
             String queryStr = "DELETE FROM FlipFitUsers WHERE userId = ?";
             PreparedStatement stmt = con.prepareStatement(queryStr);
             stmt.setInt(1, userId);
-            int result = stmt.executeUpdate();
-            if(result > 0){
-                System.out.println("User deleted successfully");
+            int queryResult = stmt.executeUpdate();
+            if(queryResult > 0){
+                printInGreen("User deleted successfully");
+                result = true;
             }
             else{
-                System.out.println("No user with id " + userId + "not found");
+                printInRed("No user with id " + userId + "not found");
             }
             con.close();
         }
         catch(Exception e){
             System.out.println(e);
         }
+        return result;
     }
 }

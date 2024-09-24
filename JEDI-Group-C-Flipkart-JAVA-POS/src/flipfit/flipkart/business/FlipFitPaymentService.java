@@ -1,12 +1,13 @@
 package flipfit.flipkart.business;
 
-import flipfit.flipkart.DAO.FlipFitPaymentDAO;
+import flipfit.flipkart.DAO.FlipFitPaymentDAOImpl;
+import flipfit.flipkart.DAO.FlipFitPaymentDAOInterface;
 import flipfit.flipkart.bean.FlipFitPayment;
 
 public class FlipFitPaymentService {
-    private FlipFitPaymentDAO flipFitPaymentDAO;
+    private FlipFitPaymentDAOInterface flipFitPaymentDAO;
     public FlipFitPaymentService() {
-        flipFitPaymentDAO = new FlipFitPaymentDAO();
+        flipFitPaymentDAO = new FlipFitPaymentDAOImpl();
     }
     public FlipFitPayment createPayment(String transactionId, int customerId){
         if(flipFitPaymentDAO.create(transactionId, customerId) == true){

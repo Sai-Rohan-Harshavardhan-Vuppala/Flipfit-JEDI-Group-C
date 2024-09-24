@@ -6,13 +6,13 @@ public class FlipFitGym {
     private String gymName;
     private String gymCity;
     private String gymArea;
-    private String status;
+    private String gymStatus;
 
-    public FlipFitGym(int gymOwnerId, String gymName, String gymCity, String gymArea, String status) {
+    public FlipFitGym(int gymOwnerId, String gymName, String gymCity, String gymArea, String gymStatus) {
         this.gymOwnerId = gymOwnerId;
         this.gymName = gymName;
         this.gymCity = gymCity;
-        this.status = status;
+        this.gymStatus = gymStatus;
         this.gymArea = gymArea;
     }
 
@@ -54,14 +54,14 @@ public class FlipFitGym {
         this.gymCity = gymCity;
     }
 
-    public String getStatus() {
+    public String getGymStatus() {
 
-        return status;
+        return gymStatus;
     }
 
-    public void setStatus(String status) {
+    public void setGymStatus(String status) {
 
-        this.status = status;
+        this.gymStatus = status;
     }
 
     public String getGymArea() {

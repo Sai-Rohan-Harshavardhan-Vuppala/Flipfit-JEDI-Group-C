@@ -10,6 +10,7 @@ import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
+import flipfit.flipkart.exceptions.*;
 import flipfit.flipkart.helper.Helper;
 import flipfit.flipkart.utils.Util;
 
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+import static flipfit.flipkart.helper.Helper.*;
 
 public class CustomerClient {
 
@@ -37,7 +40,7 @@ public class CustomerClient {
 
     private void showAllGyms(List<FlipFitGym> allGyms) {
         System.out.printf("%n---------------------------------------------------------------------------------------------------------------%n");
-        System.out.printf("All Gyms in selected City%n");
+        printInYellow("All Gyms in selected City");
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
         System.out.printf("| %-10s | %-15s | %-30s | %-20s | %-20s |%n", "GYM ID", "GYM OWNER ID", "GYM NAME", "GYM CITY", "GYM AREA");
         System.out.printf("---------------------------------------------------------------------------------------------------------------%n");
@@ -49,7 +52,7 @@ public class CustomerClient {
 
     private void showCustomerBookings(List<FlipFitBooking> bookings) {
         System.out.printf("%n----------------------------------------------------------------------------------------------------------------------%n");
-        System.out.printf("All Bookings%n");
+        printInYellow("All Bookings");
         System.out.printf("----------------------------------------------------------------------------------------------------------------------%n");
         System.out.printf("| %-12s | %-15s | %-30s | %-20s | %-25s |%n", "Customer ID", "Slot ID", "Booking Status", "Payment ID", "Booking Date");
         System.out.printf("----------------------------------------------------------------------------------------------------------------------%n");
@@ -62,7 +65,7 @@ public class CustomerClient {
 
 
     public boolean showMenu(){
-        System.out.println("\n------------------------------\nWelcome to FlipFit Customer Client");
+        printInYellow("\n------------------------------\nWelcome to FlipFit Customer Client");
 
         System.out.println("1. View available slots");
         System.out.println("2. View all gyms");
@@ -70,7 +73,8 @@ public class CustomerClient {
         System.out.println("4. View all booked slots");
 //        System.out.println("5. Update booked slot");
         System.out.println("5. Cancel booked slot");
-        System.out.println("6. Logout");
+        System.out.println("6. View slot by slot ID");
+        System.out.println("7. Logout");
         Scanner scanner = new Scanner(System.in);
         int choice = Integer.parseInt(scanner.nextLine());
         switch(choice){
@@ -80,29 +84,29 @@ public class CustomerClient {
                     System.out.println("No cities available");
                     break;
                 }
-                List<String> cities = new ArrayList<>();
-                for(FlipFitGym gym : approvedGyms){
-                    cities.add(gym.getGymCity());
-                }
-                cities = cities.stream().collect(Collectors.toSet()).stream().toList();
+                List<String> cities = approvedGyms.stream().map(gym -> {
+                    return gym.getGymCity();
+                }).collect(Collectors.toList())
+                        .stream()
+                        .collect(Collectors.toSet())
+                        .stream()
+                        .toList();
                 Util.showTable(cities, "Available cities");
                 System.out.println("Enter City Index: ");
 
-                int cityIndex = Integer.parseInt(scanner.nextLine());
-                cityIndex--;
+                int cityIndex = Integer.parseInt(scanner.nextLine()) - 1;
                 if(cityIndex < 0 || cityIndex >= cities.size()){
-                    System.out.println("Invalid City Index");
+                    printInRed("Invalid City Index");
                     break;
                 }
-                List<FlipFitGym> filteredGyms = new ArrayList<>();
-                List<String> areas = new ArrayList<>();
-                for(FlipFitGym gym : approvedGyms){
-                    if(gym.getGymCity().equals(cities.get(cityIndex))){
-                        filteredGyms.add(gym);
-                        areas.add(gym.getGymArea());
-                    }
-                }
-                areas = areas.stream().collect(Collectors.toSet()).stream().toList();
+                List<FlipFitGym> filteredGyms = approvedGyms.stream().filter((gym) -> {
+                    return gym.getGymCity().equals(cities.get(cityIndex));
+                }).collect(Collectors.toList());
+                List<String> areas = approvedGyms
+                        .stream().map((gym) -> gym.getGymArea())
+                        .collect(Collectors.toSet())
+                        .stream()
+                        .collect(Collectors.toList());
                 System.out.println("Number of approved gyms: " + approvedGyms.size());
                 Util.showTable(areas, "Available areas");
                 System.out.println("Enter Area Index: ");
@@ -110,7 +114,7 @@ public class CustomerClient {
                 int areaIndex = Integer.parseInt(scanner.nextLine());
                 areaIndex--;
                 if(areaIndex < 0 || areaIndex >= areas.size()){
-                    System.out.println("Invalid Area Index");
+                    printInRed("Invalid Area Index");
                 }
                 List<FlipFitGym> filteredGymsByArea = new ArrayList<>();
                 for(FlipFitGym gym : filteredGyms){
@@ -126,27 +130,35 @@ public class CustomerClient {
                 Helper.showSlots(slots, "Available slots");
                 break;
             case 2:
-                System.out.println("Enter city: ");
-                String city = scanner.nextLine();
                 List<FlipFitGym> allGyms = flipFitGymOwnerService.getAll();
                 showAllGyms(allGyms);
                 break;
             case 3:
-                System.out.println("Enter slotId: ");
-                int slotId = Integer.parseInt(scanner.nextLine());
-                FlipFitSlot flipFitSlot = flipFitGymOwnerService.getSlot(slotId);
-                if(flipFitSlot == null){
-                    System.out.println("Slot with slot ID " + slotId + " does not exist");
+                try {
+                    System.out.println("Enter slotId: ");
+                    int slotId = Integer.parseInt(scanner.nextLine());
+                    FlipFitSlot flipFitSlot = flipFitGymOwnerService.getSlot(slotId);
+                    if (flipFitSlot == null) {
+                        System.out.println("Slot with slot ID " + slotId + " does not exist");
+                    }
+                    FlipFitGymOwner gymOwner = flipFitGymOwnerService.getGymOwnerBySlotId(slotId);
+                    System.out.println("Pay " + flipFitSlot.getPrice() + " to account number " + gymOwner.getAccountNumber());
+                    System.out.println("Enter the transactionId: ");
+                    String transactionId = scanner.nextLine();
+                    if (flipFitCustomerService.createBooking(flipFitCustomer.getCustomerId(), slotId, transactionId)) {
+                        System.out.println("Booking successfully created");
+                    } else {
+                        System.out.println("Booking failed");
+                    }
                 }
-                FlipFitGymOwner gymOwner = flipFitGymOwnerService.getGymOwnerBySlotId(slotId);
-                System.out.println("Pay " + flipFitSlot.getPrice() + " to account number " + gymOwner.getAccountNumber());
-                System.out.println("Enter the transactionId: ");
-                String transactionId = scanner.nextLine();
-                if(flipFitCustomerService.createBooking(flipFitCustomer.getCustomerId(), slotId, transactionId)){
-                    System.out.println("Booking successfully created");
+                catch (TransactionIdNotUniqueException e){
+                    printInRed(e.getMessage());
                 }
-                else{
-                    System.out.println("Booking failed");
+                catch (InvalidBookingDetailsException e){
+                    printInRed(e.getMessage());
+                }
+                catch (SlotNotFoundException e) {
+                    printInRed(e.getMessage());
                 }
                 break;
             case 4:
@@ -165,17 +177,39 @@ public class CustomerClient {
 //                String newTransactionId = scanner.nextLine();
 //                flipFitCustomerService.createBooking(flipFitCustomer.getCustomerId(), updatedSlotId, newTransactionId);
             case 5:
-                System.out.println("Enter bookingId: ");
-                int inputBookingId = Integer.parseInt(scanner.nextLine());
-                if(flipFitCustomerService.cancelBooking(flipFitCustomer.getCustomerId(), inputBookingId) == true){
-                    System.out.println("Booking cancelled successfully");
+                try {
+                    System.out.println("Enter bookingId: ");
+                    int inputBookingId = Integer.parseInt(scanner.nextLine());
+                    if (flipFitCustomerService.cancelBooking(flipFitCustomer.getCustomerId(), inputBookingId) == true) {
+                        System.out.println("Booking cancelled successfully");
+                    } else {
+                        System.out.println("Invalid details. Booking could not be created.");
+                    }
                 }
-                else{
-                    System.out.println("Invalid details. Booking could not be created.");
+                catch(BookingNotFoundException e){
+                    printInRed(e.getMessage());
+                }
+                catch(InvalidBookingIdCustomerException e){
+                    printInRed(e.getMessage());
                 }
                 break;
-
             case 6:
+                System.out.println("Enter slot ID: ");
+                int viewSlotId = Integer.parseInt(scanner.nextLine());
+                List<FlipFitSlot> viewSlots = new ArrayList<FlipFitSlot>();
+                FlipFitSlot slot = flipFitGymOwnerService.getSlot(viewSlotId);
+                if(slot == null || slot.getStatus().equals("pending")){
+                    System.out.println("Invalid slot ID");
+                }
+                else{
+                    viewSlots.add(slot);
+                    Helper.showSlots(viewSlots, "Slot details of slot with slot ID " + viewSlotId);
+                }
+//            case 7:
+//                System.out.println("Enter date (YYYY-MM-DD):");
+//                String date = scanner.nextLine();
+//                flipFitCustomerService.getAllBookingsByDateAndCustomerId(flipFitCustomer.getCustomerId(), date);
+            case 7:
                 System.out.println("Logged out successfully");
                 return true;
         }

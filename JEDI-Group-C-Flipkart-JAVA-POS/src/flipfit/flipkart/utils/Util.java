@@ -7,17 +7,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.List;
 
+import static flipfit.flipkart.helper.Helper.*;
+
 public class Util {
     public static Connection connectToDatabase() throws Exception{
         Class.forName("com.mysql.jdbc.Driver");
         Connection con = DriverManager.getConnection(Constant.DATABASE_URL, Constant.DATABASE_USER, Constant.DATABASE_PASSWORD);
-        System.out.println("Connected to database");
+        printInGreen("Connected to database");
         return con;
     }
 
     public static void showTable(List<String> values, String title){
 //        System.out.printf("%n---------------------------------------------------------------------------------------------------------------------------------%n");
-        System.out.printf("%n%s%n", title);
+        printInYellow("\n" + title);
 //        System.out.printf("---------------------------------------------------------------------------------------------------------------------------------%n");
         int valueIndex = 0;
         int columnCount = values.size() / 5;

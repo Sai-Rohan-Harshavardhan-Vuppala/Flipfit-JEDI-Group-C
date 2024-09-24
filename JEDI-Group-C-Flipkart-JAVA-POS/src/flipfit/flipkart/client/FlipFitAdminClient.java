@@ -6,12 +6,18 @@ import flipfit.flipkart.business.FlipFitAdminService;
 import flipfit.flipkart.business.FlipFitCustomerService;
 import flipfit.flipkart.business.FlipFitGymOwnerService;
 import flipfit.flipkart.business.FlipFitPaymentService;
+import flipfit.flipkart.exceptions.GymNotFoundException;
+import flipfit.flipkart.exceptions.SlotAlreadyApprovedException;
+import flipfit.flipkart.exceptions.SlotNotFoundException;
+import flipfit.flipkart.exceptions.UserNotFoundException;
 import flipfit.flipkart.helper.Helper;
 
 
 import java.util.List;
 import java.util.Scanner;
 
+import static flipfit.flipkart.helper.Helper.printInRed;
+import static flipfit.flipkart.helper.Helper.printInYellow;
 import static java.lang.System.in;
 
 public class FlipFitAdminClient {
@@ -77,7 +83,7 @@ public class FlipFitAdminClient {
     }
 
     public boolean showMenu(){
-        System.out.println("\n------------------------------\nWelcome to FlipFit Admin Client");
+        printInYellow("\n------------------------------\nWelcome to FlipFit Admin Client");
         System.out.println("1. View pending registrations");
         System.out.println("2. Approve Gym Owner");
         System.out.println("3. Reject Gym Owner");
@@ -103,14 +109,25 @@ public class FlipFitAdminClient {
                 showPendingGymOwners(pendingGymOwnerList);
                 break;
             case 2:
-                System.out.println("Enter User ID: ");
-                int approvedUserId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.approveGymOwner(approvedUserId);
+                try{
+                    System.out.println("Enter User ID: ");
+                    int approvedUserId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.approveGymOwner(approvedUserId);
+                }
+                catch(UserNotFoundException e){
+                    printInRed(e.getMessage());
+                }
+
                 break;
             case 3:
-                System.out.println("Enter User ID: ");
-                int rejectedUserId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.rejectGymOwner(rejectedUserId);
+                try {
+                    System.out.println("Enter User ID: ");
+                    int rejectedUserId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.rejectGymOwner(rejectedUserId);
+                }
+                catch(UserNotFoundException e){
+                    printInRed(e.getMessage());
+                }
                 break;
             case 4:
                 System.out.println("Pending gym requests displayed");
@@ -123,25 +140,48 @@ public class FlipFitAdminClient {
                 Helper.showSlots(pendingSlots, "Pending slots");
                 break;
             case 6:
-                System.out.println("Enter gymId: ");
-                int approvedGymId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.approveGym(approvedGymId);
-                break;
-            case 7:
-                System.out.println("Enter gymId: ");
-                int rejectedGymId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.rejectGym(rejectedGymId);
-                break;
-            case 8:
-                System.out.println("Enter slotId: ");
-                int approvedSlotId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.approveSlot(approvedSlotId);
+                try{
+                    System.out.println("Enter gymId: ");
+                    int approvedGymId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.approveGym(approvedGymId);
+                }
+                catch(GymNotFoundException e){
+                    printInRed(e.getMessage());
+                }
 
                 break;
+            case 7:
+                try{
+                    System.out.println("Enter gymId: ");
+                    int rejectedGymId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.rejectGym(rejectedGymId);
+                }
+                catch(GymNotFoundException e){
+                    printInRed(e.getMessage());
+                }
+                break;
+            case 8:
+                try{
+                    System.out.println("Enter slotId: ");
+                    int approvedSlotId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.approveSlot(approvedSlotId);
+                }
+                catch(SlotNotFoundException e){
+                    printInRed(e.getMessage());
+                }
+                catch(SlotAlreadyApprovedException e){
+                    printInRed(e.getMessage());
+                }
+                break;
             case 9:
-                System.out.println("Enter slotId: ");
-                int rejectedSlotId = Integer.parseInt(sc.nextLine());
-                flipFitAdminService.rejectSlot(rejectedSlotId);
+                try{
+                    System.out.println("Enter slotId: ");
+                    int rejectedSlotId = Integer.parseInt(sc.nextLine());
+                    flipFitAdminService.rejectSlot(rejectedSlotId);
+                }
+                catch(SlotNotFoundException e){
+                    printInRed(e.getMessage());
+                }
                 break;
             case 10:
                 FlipFitCustomerService customerService = new FlipFitCustomerService();

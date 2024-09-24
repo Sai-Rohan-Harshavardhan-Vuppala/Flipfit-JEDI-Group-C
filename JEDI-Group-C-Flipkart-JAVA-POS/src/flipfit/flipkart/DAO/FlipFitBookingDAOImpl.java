@@ -7,10 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class FlipFitBookingDAO {
+public class FlipFitBookingDAOImpl implements FlipFitBookingDAOInterface{
     public boolean create(int customerId, int slotId, int paymentId, String bookingStatus){
         try{
             Connection con = Util.connectToDatabase();
@@ -217,4 +216,32 @@ public class FlipFitBookingDAO {
         }
         return bookings;
     }
+
+//    public List<FlipFitBooking> getByDateAndCustomerId(int customerId, String date){
+//        List<FlipFitBooking> bookings = new ArrayList<>();
+//        try{
+//            Connection con = Util.connectToDatabase();
+//            String queryStr = "SELECT bs.*, g.* FROM (SELECT b.*, s.slotId AS slotId_s, s.gymId AS gymId_s FROM FlipFitBookings b LEFT JOIN FlipFitSlots s ON b.slotId = s.slotId WHERE b.customerId = ? AND s.slotDate = ? ORDER BY s.startTime ASC ) bs LEFT JOIN FlipFitGyms g ON bs.gymId_s = g.gymId";
+//            PreparedStatement stmt = con.prepareStatement(queryStr);
+//            stmt.setInt(1, customerId);
+//            stmt.setString(2, date);
+//            ResultSet rs = stmt.executeQuery();
+//            while(rs.next()){
+//                FlipFitBooking booking = new FlipFitBooking();
+//                booking.setCustomerId(rs.getInt("customerId"));
+//                booking.setBookingId(rs.getInt("bookingId"));
+//                booking.setSlotId(rs.getInt("slotId"));
+//                booking.setGymId(rs.getInt("gymId"));
+//                booking.setPaymentId(rs.getInt("paymentId"));
+//                booking.setCreatedAt(rs.getTimestamp("createdAt"));
+//                booking.setSlotDate(rs.getDate("slotDate"));
+//                booking.
+//                bookings.add(booking);
+//            }
+//        }
+//        catch(Exception e){
+//            System.out.println(e);
+//        }
+//        return bookings;
+//    }
 }
