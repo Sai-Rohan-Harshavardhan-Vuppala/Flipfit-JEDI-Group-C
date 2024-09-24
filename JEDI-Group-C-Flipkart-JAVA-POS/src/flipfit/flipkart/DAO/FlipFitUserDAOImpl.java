@@ -55,6 +55,7 @@ public class FlipFitUserDAOImpl implements FlipFitUserDAOInterface {
                 user.setPassword(rs.getString("password"));
                 user.setUsername(rs.getString("username"));
                 user.setStatus(rs.getString("status"));
+                user.setRoleId(rs.getInt("roleId"));
                 userList.add(user);
             }
             if(!userList.isEmpty()){

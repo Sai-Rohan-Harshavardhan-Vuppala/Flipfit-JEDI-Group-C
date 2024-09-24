@@ -167,6 +167,7 @@ public class GymOwnerClient {
                     viewSlots.add(slot);
                     Helper.showSlots(viewSlots, "Slot details of slot with slot ID " + viewSlotId);
                 }
+                break;
             case 6:
                 System.out.println("Logout Successfully");
                 return true;
